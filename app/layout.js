@@ -1,15 +1,27 @@
-import localFont from "next/font/local";
+import { Oswald, Inter, Merienda, Quicksand } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+// Importing Oswald and Inter fonts with custom weights and subsets
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["400", "700"], // Specify the weights you want to use
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"], // Specify the weights you want to use
+});
+
+const merienda = Merienda({
+  subsets: ["latin"],
+  weight: ["400", "700"], // Specify the weights you want to use
+});
+
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"], // Specify the weights you want to use
 });
 
 export const metadata = {
@@ -20,10 +32,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${oswald.className} ${inter.className}`}>
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

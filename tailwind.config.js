@@ -1,3 +1,5 @@
+const { Quicksand } = require("next/font/google");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -10,6 +12,12 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+      fontFamily: {
+        oswald: ['"Oswald"', "sans-serif"],
+        inter: ['"Inter"', "sans-serif"],
+        merienda: ['"Merienda"', "cursive"],
+        quicksand: ['"Quicksand"', "sans-serif"],
       },
     },
   },

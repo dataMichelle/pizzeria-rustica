@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Tiramisu",
+    "price": 11.0,
+    "image": "/tiramisu.png"
+  },
+  {
+    "id": 2,
+    "name": "Chocolate Cake",
+    "price": 11.0,
+    "image": "/chocolate_cake.png"
+  },
+  {
+    "id": 3,
+    "name": "Cannolis",
+    "price": 11.0,
+    "image": "/cannoli.png"
+  },
+  {
+    "id": 4,
+    "name": "Affogato al Cafe",
+    "price": 11.0,
+    "image": "/affogato.png"
+  }
+]

@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "name": "Pizza Tartufata",
+    "description": "White pizza with truffle cream, mozzarella, porcini mushrooms, and fresh shaved truffles.",
+    "ingredients": [
+      "Truffle cream",
+      "Mozzarella",
+      "Porcini mushrooms",
+      "Fresh truffles"
+    ],
+    "price": 18.5,
+    "image": "/tartufata.png"
+  },
+  {
+    "id": 2,
+    "name": "Pizza Prosciutto e Rucola",
+    "description": "Tomato sauce, fresh mozzarella, Parma ham, and a bed of fresh arugula.",
+    "ingredients": ["Tomato sauce", "Mozzarella", "Parma ham", "Arugula"],
+    "price": 17,
+    "image": "/arugula_.png"
+  },
+  {
+    "id": 3,
+    "name": "Pizza Quattro Formaggi",
+    "description": "A blend of four cheeses: Gorgonzola, Mozzarella, Fontina, and Parmigiano-Reggiano.",
+    "ingredients": [
+      "Gorgonzola",
+      "Mozzarella",
+      "Fontina",
+      "Parmigiano-Reggiano"
+    ],
+    "price": 16,
+    "image": "/quattro_formaggi.png"
+  },
+  {
+    "id": 4,
+    "name": "Pizza Funghi Porcini",
+    "description": "Tomato sauce, mozzarella, and wild porcini mushrooms, topped with a drizzle of truffle oil.",
+    "ingredients": [
+      "Tomato sauce",
+      "Mozzarella",
+      "Porcini mushrooms",
+      "Truffle oil"
+    ],
+    "price": 16.5,
+    "image": "/funghi_porcini.png"
+  },
+  {
+    "id": 5,
+    "name": "Pizza Salsiccia e Radicchio",
+    "description": "Tomato sauce, mozzarella, Italian sausage, and grilled radicchio, finished with a touch of balsamic glaze.",
+    "ingredients": [
+      "Tomato sauce",
+      "Mozzarella",
+      "Italian sausage",
+      "Radicchio",
+      "Balsamic glaze"
+    ],
+    "price": 17.5,
+    "image": "/salsiccia.png"
+  },
+  {
+    "id": 6,
+    "name": "Pizza Bresaola e Grana",
+    "description": "White pizza with mozzarella, thinly sliced Bresaola, arugula, and shaved Grana Padano cheese.",
+    "ingredients": ["Mozzarella", "Bresaola", "Arugula", "Grana Padano"],
+    "price": 18,
+    "image": "/bresaola.png"
+  },
+  {
+    "id": 7,
+    "name": "Pizza al Gorgonzola e Pere",
+    "description": "White pizza with mozzarella, Gorgonzola cheese, and caramelized pears, topped with walnuts.",
+    "ingredients": ["Mozzarella", "Gorgonzola", "Caramelized pears", "Walnuts"],
+    "price": 18,
+    "image": "/gorgonzola_pera.png"
+  },
+  {
+    "id": 8,
+    "name": "Pizza alla Piemontese",
+    "description": "Tomato sauce, mozzarella, speck (smoked prosciutto), and caramelized onions, finished with fresh thyme.",
+    "ingredients": [
+      "Tomato sauce",
+      "Mozzarella",
+      "Speck",
+      "Caramelized onions",
+      "Fresh thyme"
+    ],
+    "price": 17.5,
+    "image": "/piemontese.png"
+  },
+  {
+    "id": 9,
+    "name": "Pizza Polenta e Taleggio",
+    "description": "A unique pizza with a polenta crust, topped with Taleggio cheese, sautéed mushrooms, and fresh rosemary.",
+    "ingredients": [
+      "Polenta crust",
+      "Taleggio cheese",
+      "Sautéed mushrooms",
+      "Fresh rosemary"
+    ],
+    "price": 19,
+    "image": "/polenta_taleggio.png"
+  }
+]
