@@ -1,3 +1,4 @@
+export const fetchCache = "force-no-store";
 export default function About() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
