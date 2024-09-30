@@ -5,8 +5,8 @@ export default function About() {
         About Pizzeria Rustica
       </h1>
       <p className="text-lg leading-relaxed mb-6">
-        Pizzeria Rustica is more than just a restaurant—it's the story of a
-        family's love for authentic Italian cuisine, a tradition that has
+        Pizzeria Rustica is more than just a restaurant — it is the story of a
+        family&apos love for authentic Italian cuisine, a tradition that has
         spanned three generations. It all began over 70 years ago when the Rossi
         family emigrated from a small town in southern Italy. With them, they
         brought cherished recipes, a passion for crafting the perfect pizza, and
@@ -22,9 +22,10 @@ export default function About() {
       <p className="text-lg leading-relaxed mb-6">
         Today, Pizzeria Rustica is proudly run by the third generation of the
         Rossi family, who continue to uphold the values of tradition, quality,
-        and community that were established decades ago. Whether you're enjoying
-        our signature pizza or trying one of our house-made pasta dishes, you're
-        not just getting a meal—you're becoming part of our family legacy.
+        and community that were established decades ago. Whether you&aposre
+        enjoying our signature pizza or trying one of our house-made pasta
+        dishes, you&aposre not just getting a meal - you&aposre becoming part of
+        our family legacy.
       </p>
       <p className="text-lg leading-relaxed mb-6">
         We invite you to experience the rich history and flavors of Italy, right
