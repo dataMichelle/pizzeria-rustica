@@ -8,11 +8,11 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
   const handleCheckout = async (e) => {
     e.preventDefault(); // Prevent form submission
 
-    console.log("Total Price:", totalPrice); // Log to check totalPrice
+    console.log("Total Price:", totalPrice);
 
     // Convert totalPrice to cents for Stripe
     const totalPriceInCents = Math.round(totalPrice * 100);
-    console.log("Total Price in Cents:", totalPriceInCents); // Log converted price
+    console.log("Total Price in Cents:", totalPriceInCents);
 
     if (isNaN(totalPriceInCents)) {
       console.error("Invalid total price:", totalPriceInCents);
@@ -20,7 +20,6 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
     }
 
     try {
-      // Ensure stripePromise is available
       const stripe = await stripePromise;
       if (!stripe) {
         console.error("Stripe is not loaded properly.");
@@ -35,7 +34,7 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
         }
       );
 
-      // Make API request to create Stripe session
+      // API call to /api/checkout
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: {

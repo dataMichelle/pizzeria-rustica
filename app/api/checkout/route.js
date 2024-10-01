@@ -1,12 +1,13 @@
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-console.log("Stripe Secret Key:", process.env.STRIPE_SECRET_KEY);
+console.log("Stripe Secret Key Loaded:", process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      const { items, totalPrice } = req.body;
+      const { items } = req.body;
+      console.log("Received items:", items);
 
       // Create a new Checkout Session
       const session = await stripe.checkout.sessions.create({
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
             product_data: {
               name: item.name,
             },
-            unit_amount: Math.round(item.price * 100), // Ensure correct calculation to cents
+            unit_amount: Math.round(item.price * 100), // Convert to cents
           },
           quantity: item.quantity,
         })),
@@ -25,6 +26,8 @@ export default async function handler(req, res) {
         success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
         cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cancel`,
       });
+
+      console.log("Created Stripe Session:", session);
 
       res.status(200).json({ id: session.id });
     } catch (error) {
