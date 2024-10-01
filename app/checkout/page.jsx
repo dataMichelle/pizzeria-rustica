@@ -5,29 +5,19 @@ import PayPalCheckout from "@/components/PayPalCheckout";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
-  const [tipAmount, setTipAmount] = useState(0); // Store the tip amount from cart
+  const [total, setTotal] = useState(0);
+  const [tipAmount, setTipAmount] = useState(0);
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(storedCart);
 
-    // Assuming tipAmount is stored in localStorage as 'tip'
+    const storedTotal = parseFloat(localStorage.getItem("finalTotal")) || 0;
     const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
+
+    setTotal(storedTotal);
     setTipAmount(storedTip);
   }, []);
-
-  const handleClearCart = () => {
-    setCartItems([]);
-    localStorage.removeItem("cart");
-    localStorage.removeItem("tip");
-  };
-
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-  const tax = subtotal * 0.0825;
-  const total = subtotal + tax + tipAmount;
 
   return (
     <div className="container mx-auto py-12">
@@ -53,23 +43,10 @@ export default function CheckoutPage() {
           )}
 
           {/* Order Total with Tip and Tax */}
-          <p className="font-semibold text-lg mt-6">
-            Subtotal: ${subtotal.toFixed(2)}
-          </p>
-          <p className="font-semibold text-lg mt-2">Tax: ${tax.toFixed(2)}</p>
           <p className="font-semibold text-lg mt-2">
             Tip: ${tipAmount.toFixed(2)}
           </p>
           <p className="font-bold text-xl mt-4">Total: ${total.toFixed(2)}</p>
-
-          {cartItems.length > 0 && (
-            <button
-              onClick={handleClearCart}
-              className="mt-4 bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-200"
-            >
-              Clear Cart
-            </button>
-          )}
         </div>
 
         <div className="w-full md:w-1/2">

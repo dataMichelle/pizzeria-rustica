@@ -109,7 +109,7 @@ export default function Cart() {
             id="tip"
             value={tip}
             onChange={(e) => setTip(parseFloat(e.target.value))}
-            className="border px-2 py-1 w-full"
+            className="border px-2 py-1 w-20"
             placeholder="Enter tip amount"
           />
         </div>

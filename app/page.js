@@ -30,8 +30,8 @@ export default function HomePage() {
           <Image
             src="/hero_serving_pizza.png"
             alt="Pizzeria Rustica Hero Image"
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
             className="rounded-lg"
           />
         </div>

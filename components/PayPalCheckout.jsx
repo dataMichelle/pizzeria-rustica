@@ -1,4 +1,3 @@
-// app/components/PayPalCheckout.js
 "use client";
 
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
