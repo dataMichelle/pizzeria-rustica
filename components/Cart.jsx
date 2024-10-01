@@ -53,18 +53,18 @@ export default function Cart() {
   };
 
   if (cartItems.length === 0) {
-    return <p>Your cart is empty.</p>;
+    return <p className="text-center">Your cart is empty.</p>;
   }
 
   return (
-    <div className="w-full px-4 md:px-12 lg:px-24 my-2">
-      <ul>
+    <div className="w-full max-w-xl mx-auto px-4 md:px-6 lg:px-8 my-2">
+      <ul className="space-y-4">
         {cartItems.map((item) => (
           <li
             key={item.id}
-            className="flex flex-col md:flex-row justify-between mb-4 items-center border-b pb-4"
+            className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4"
           >
-            <div className="flex-1 w-full md:w-auto">
+            <div className="flex-1">
               <h2 className="text-xl">{item.name}</h2>
               <p className="text-gray-600">${item.price} each</p>
               <div className="flex items-center mt-2">
@@ -83,7 +83,7 @@ export default function Cart() {
                 />
               </div>
             </div>
-            <div className="flex flex-col items-end mt-4 md:mt-0">
+            <div className="flex flex-col items-start md:items-end mt-4 md:mt-0">
               <p className="text-lg font-semibold">
                 Total: ${(item.price * item.quantity).toFixed(2)}
               </p>
@@ -105,7 +105,7 @@ export default function Cart() {
         </p>
         <p className="text-lg font-semibold">Tax: ${tax.toFixed(2)}</p>
 
-        <div className="my-4">
+        <div className="my-4 text-left">
           <label htmlFor="tip" className="block font-semibold mb-2">
             Tip Amount:
           </label>
@@ -114,7 +114,7 @@ export default function Cart() {
             id="tip"
             value={tip}
             onChange={(e) => setTip(parseFloat(e.target.value))}
-            className="border px-2 py-1 w-20"
+            className="border px-2 py-1 w-24"
             placeholder="Enter tip amount"
           />
         </div>
