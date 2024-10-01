@@ -3,7 +3,6 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method === "POST") {
     try {
       const { items, totalPrice } = req.body;
@@ -32,7 +31,7 @@ export default async function handler(req, res) {
       res.status(500).json({ error: error.message });
     }
   } else {
-    // If the method is not POST, return a 405 status code
+    // Handle non-POST requests with 405 status
     res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
