@@ -57,13 +57,16 @@ export default function Cart() {
   }
 
   return (
-    <div className="mx-80 my-2">
+    <div className="w-full px-4 md:px-12 lg:px-24 my-2">
       <ul>
         {cartItems.map((item) => (
-          <li key={item.id} className="flex justify-between mb-4 items-center">
-            <div>
+          <li
+            key={item.id}
+            className="flex flex-col md:flex-row justify-between mb-4 items-center border-b pb-4"
+          >
+            <div className="flex-1 w-full md:w-auto">
               <h2 className="text-xl">{item.name}</h2>
-              <p>${item.price} each</p>
+              <p className="text-gray-600">${item.price} each</p>
               <div className="flex items-center mt-2">
                 <label htmlFor={`quantity-${item.id}`} className="mr-2">
                   Quantity:
@@ -80,8 +83,10 @@ export default function Cart() {
                 />
               </div>
             </div>
-            <div>
-              <p>Total: ${(item.price * item.quantity).toFixed(2)}</p>
+            <div className="flex flex-col items-end mt-4 md:mt-0">
+              <p className="text-lg font-semibold">
+                Total: ${(item.price * item.quantity).toFixed(2)}
+              </p>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded mt-2"
                 onClick={() => handleRemoveItem(item.id)}
