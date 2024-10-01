@@ -1,4 +1,3 @@
-"use client";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function PayPalCheckout({ totalPrice }) {
@@ -11,9 +10,7 @@ export default function PayPalCheckout({ totalPrice }) {
           return actions.order.create({
             purchase_units: [
               {
-                amount: {
-                  value: totalPrice.toFixed(2),
-                },
+                amount: { value: totalPrice.toFixed(2) },
               },
             ],
           });
