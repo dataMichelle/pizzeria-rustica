@@ -4,8 +4,13 @@ import Image from "next/image";
 
 export default function PizzaCard({ pizza }) {
   const [quantity, setQuantity] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false); // For preventing multiple clicks
 
-  const addToCart = () => {
+  const addToCart = async () => {
+    if (isProcessing) return; // Prevent further clicks while processing
+
+    setIsProcessing(true); // Disable button
+
     const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
     const itemIndex = currentCart.findIndex((item) => item.id === pizza.id);
 
@@ -16,7 +21,13 @@ export default function PizzaCard({ pizza }) {
     }
 
     localStorage.setItem("cart", JSON.stringify(currentCart));
-    alert(`${quantity} ${pizza.name}(s) added to your cart!`);
+
+    // Non-blocking alert
+    setTimeout(() => {
+      alert(`${quantity} ${pizza.name}(s) added to your cart!`);
+    }, 0);
+
+    setIsProcessing(false); // Re-enable button after processing
   };
 
   const handleIncrease = () => setQuantity(quantity + 1);
@@ -63,10 +74,13 @@ export default function PizzaCard({ pizza }) {
             </button>
           </div>
           <button
-            className="py-2 px-4 rounded-full ml-4 hover:bg-opacity-90 transition duration-300 text-xs uppercase font-medium tracking-wider"
+            className={`py-2 px-4 rounded-full ml-4 hover:bg-opacity-90 transition duration-300 text-xs uppercase font-medium tracking-wider ${
+              isProcessing ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             onClick={addToCart}
+            disabled={isProcessing} // Disable button while processing
           >
-            Add to Cart
+            {isProcessing ? "Processing..." : "Add to Cart"}
           </button>
         </div>
       </div>
