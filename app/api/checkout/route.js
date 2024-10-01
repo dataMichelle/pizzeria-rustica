@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     try {
       const { items, totalPrice } = req.body;
 
-      // Create a new Checkout Session
+      // Create a new Stripe session
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: items.map((item) => ({
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
             product_data: {
               name: item.name,
             },
-            unit_amount: Math.round(item.price * 100), // Convert to cents
+            unit_amount: item.price * 100, // Price in cents
           },
           quantity: item.quantity,
         })),
@@ -27,11 +27,9 @@ export default async function handler(req, res) {
 
       res.status(200).json({ id: session.id });
     } catch (error) {
-      console.error("Stripe session creation error:", error);
       res.status(500).json({ error: error.message });
     }
   } else {
-    // Handle non-POST requests with 405 status
     res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
