@@ -3,6 +3,9 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
+  console.log("Request method:", req.method); // Log request method
+  console.log("Request body:", req.body); // Log request body
+
   if (req.method === "POST") {
     try {
       const { items, totalPrice } = req.body;
@@ -25,8 +28,11 @@ export default async function handler(req, res) {
         cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cancel`,
       });
 
+      console.log("Stripe session created:", session); // Log session details
+
       res.status(200).json({ id: session.id });
     } catch (error) {
+      console.error("Error creating Stripe session:", error); // Log error details
       res.status(500).json({ error: error.message });
     }
   } else {
