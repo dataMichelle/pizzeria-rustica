@@ -1,7 +1,10 @@
 import dynamic from "next/dynamic";
 
-// Dynamically import the Cart component
-const Cart = dynamic(() => import("@/components/Cart"), { ssr: false });
+// Dynamically import the Cart component with a fallback loading state
+const Cart = dynamic(() => import("@/components/Cart"), {
+  ssr: false,
+  loading: () => <p>Loading your cart...</p>, // Fallback during loading
+});
 
 export default function CartPage() {
   return (
