@@ -6,18 +6,23 @@ const stripePromise = loadStripe(
 
 export default function StripeCheckoutButton({ totalPrice, items }) {
   const handleCheckout = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevent form submission
+    console.log("Total Price:", totalPrice); // Log to check
 
-    console.log("Total Price:", totalPrice);
-
+    // Convert totalPrice to cents for Stripe
     const totalPriceInCents = Math.round(totalPrice * 100);
-
     if (isNaN(totalPriceInCents)) {
       console.error("Invalid total price:", totalPriceInCents);
       return;
     }
 
+    // Ensure stripePromise is available
     const stripe = await stripePromise;
+
+    if (!stripe) {
+      console.error("Stripe is not loaded properly.");
+      return;
+    }
 
     const response = await fetch("/api/checkout", {
       method: "POST",
@@ -27,15 +32,10 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
       body: JSON.stringify({ items, totalPrice: totalPriceInCents }),
     });
 
-    if (!response.ok) {
-      console.error("Failed to create checkout session:", response.statusText);
-      return;
-    }
-
     const session = await response.json();
 
     if (!session.id) {
-      console.error("Failed to retrieve session id from server response.");
+      console.error("Session ID is not available.");
       return;
     }
 
