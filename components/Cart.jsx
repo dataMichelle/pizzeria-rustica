@@ -57,14 +57,14 @@ export default function Cart() {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto px-4 md:px-6 lg:px-8 my-2">
+    <div className="container mx-auto px-4 md:px-6 lg:px-8 my-2">
       <ul className="space-y-4">
         {cartItems.map((item) => (
           <li
             key={item.id}
-            className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4"
+            className="flex flex-col md:flex-row justify-between items-center border-b pb-4"
           >
-            <div className="flex-1">
+            <div className="w-full md:w-auto">
               <h2 className="text-xl">{item.name}</h2>
               <p className="text-gray-600">${item.price} each</p>
               <div className="flex items-center mt-2">
@@ -83,7 +83,7 @@ export default function Cart() {
                 />
               </div>
             </div>
-            <div className="flex flex-col items-start md:items-end mt-4 md:mt-0">
+            <div className="flex flex-col items-center md:items-end mt-4 md:mt-0">
               <p className="text-lg font-semibold">
                 Total: ${(item.price * item.quantity).toFixed(2)}
               </p>
@@ -99,13 +99,13 @@ export default function Cart() {
       </ul>
 
       {/* Running Total Section */}
-      <div className="my-8 text-right">
+      <div className="my-8 text-right md:text-left">
         <p className="text-lg font-semibold">
           Subtotal: ${subtotal.toFixed(2)}
         </p>
         <p className="text-lg font-semibold">Tax: ${tax.toFixed(2)}</p>
 
-        <div className="my-4 text-left">
+        <div className="my-4">
           <label htmlFor="tip" className="block font-semibold mb-2">
             Tip Amount:
           </label>
