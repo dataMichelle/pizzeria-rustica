@@ -1,5 +1,6 @@
 export default function StripeCheckoutButton({ totalPrice, items }) {
-  const handleCheckout = async () => {
+  const handleCheckout = async (e) => {
+    e.preventDefault(); // Prevent form submission
     console.log("Total Price:", totalPrice); // Log to check
 
     // Convert totalPrice to cents for Stripe
