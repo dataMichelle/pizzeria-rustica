@@ -1,11 +1,11 @@
 export default function StripeCheckoutButton({ totalPrice, items }) {
   const handleCheckout = async () => {
-    // Log totalPrice and items to verify their values
-    console.log("Total Price:", totalPrice);
-    console.log("Items:", items);
+    console.log("Total Price:", totalPrice); // Log to check
 
-    if (isNaN(totalPrice)) {
-      console.error("Invalid total price:", totalPrice);
+    // Convert totalPrice to cents for Stripe
+    const totalPriceInCents = Math.round(totalPrice * 100);
+    if (isNaN(totalPriceInCents)) {
+      console.error("Invalid total price:", totalPriceInCents);
       return;
     }
 
@@ -16,7 +16,7 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ items, totalPrice }),
+      body: JSON.stringify({ items, totalPrice: totalPriceInCents }),
     });
 
     const session = await response.json();
