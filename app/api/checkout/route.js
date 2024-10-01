@@ -4,6 +4,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   console.log("Request method:", req.method); // Log request method
+  console.log("Request headers:", req.headers); // Log request headers
   console.log("Request body:", req.body); // Log request body
 
   if (req.method === "POST") {
@@ -36,6 +37,7 @@ export default async function handler(req, res) {
       res.status(500).json({ error: error.message });
     }
   } else {
+    console.log("Invalid request method:", req.method); // Log invalid method
     res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
