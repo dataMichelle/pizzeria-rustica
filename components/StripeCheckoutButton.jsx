@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -14,15 +13,12 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
     setLoading(true);
     const stripe = await stripePromise;
 
-    // Create a checkout session with just the total amount rather than individual items
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        amount: totalPrice, // Send the total price, including tax and tip
-      }),
+      body: JSON.stringify({ items, totalPrice }), // Ensure totalPrice is being passed
     });
 
     const session = await response.json();
@@ -33,7 +29,6 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
       return;
     }
 
-    // Redirect to Stripe Checkout
     const { error } = await stripe.redirectToCheckout({
       sessionId: session.id,
     });
@@ -49,7 +44,7 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
     <button
       onClick={handleCheckout}
       disabled={loading}
-      className="bg-blue-500 text-white py-2 px-4 rounded-lg whitespace-nowrap"
+      className="bg-blue-500 text-white py-2 px-4 rounded-lg"
     >
       {loading ? "Processing..." : "Pay with Stripe"}
     </button>
