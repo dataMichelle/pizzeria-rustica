@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 
+// Ensure console.log is separate from the stripePromise
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-  console.log(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 );
 
 export default function StripeCheckoutButton({ totalPrice, items }) {
@@ -12,8 +12,11 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
 
   const handleCheckout = async () => {
     setLoading(true);
+
+    // Load the Stripe object
     const stripe = await stripePromise;
 
+    // Fetch the checkout session from your API
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: {
@@ -24,16 +27,19 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
 
     const session = await response.json();
 
+    // Handle errors from the session creation process
     if (session.error) {
       console.error(session.error);
       setLoading(false);
       return;
     }
 
+    // Redirect to Stripe Checkout
     const { error } = await stripe.redirectToCheckout({
       sessionId: session.id,
     });
 
+    // Handle errors from Stripe redirection
     if (error) {
       console.error(error);
     }
