@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [tip, setTip] = useState(0);
+  const router = useRouter(); // Use router for manual navigation
 
   // Load cart items from localStorage on initial load
   useEffect(() => {
@@ -49,7 +51,12 @@ export default function Cart() {
   // Save the final total to localStorage when proceeding to checkout
   const handleProceedToCheckout = () => {
     const finalAmount = total.toFixed(2);
+    console.log("Final Total Saved:", finalAmount); // Log the final total
     localStorage.setItem("finalTotal", finalAmount); // Save final total including tip to localStorage
+    localStorage.setItem("tip", tip); // Save the tip amount
+
+    // Navigate to the checkout page after saving
+    router.push("/checkout");
   };
 
   if (cartItems.length === 0) {
@@ -113,7 +120,7 @@ export default function Cart() {
             type="number"
             id="tip"
             value={tip}
-            onChange={(e) => setTip(parseFloat(e.target.value))}
+            onChange={(e) => setTip(parseFloat(e.target.value) || 0)} // Ensure valid number
             className="border px-2 py-1 w-24"
             placeholder="Enter tip amount"
           />
@@ -137,13 +144,12 @@ export default function Cart() {
         </button>
 
         {/* Proceed to Checkout Button */}
-        <Link
-          href="/checkout"
+        <button
           className="bg-green-500 text-white px-4 py-2 rounded"
           onClick={handleProceedToCheckout}
         >
           Proceed to Checkout
-        </Link>
+        </button>
       </div>
     </div>
   );
