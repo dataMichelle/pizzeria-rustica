@@ -20,7 +20,7 @@ export default function CheckoutPage() {
   }, []);
 
   return (
-    <div className="container mx-auto py-12">
+    <div className="container mx-auto text-center py-12">
       <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
 
       <div className="flex flex-col md:flex-row md:space-x-10">
