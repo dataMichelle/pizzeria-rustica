@@ -9,9 +9,7 @@ export default function CartPage() {
       <h1 className="text-2xl md:text-3xl text-center my-4 md:my-8">
         Your Cart
       </h1>
-      <div className="flex justify-center">
-        <Cart />
-      </div>
+      <Cart />
     </div>
   );
 }
