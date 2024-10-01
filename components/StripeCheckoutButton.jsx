@@ -1,10 +1,17 @@
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
+
 export default function StripeCheckoutButton({ totalPrice, items }) {
   const handleCheckout = async (e) => {
-    e.preventDefault(); // Prevent form submission
-    console.log("Total Price:", totalPrice); // Log to check
+    e.preventDefault();
 
-    // Convert totalPrice to cents for Stripe
+    console.log("Total Price:", totalPrice);
+
     const totalPriceInCents = Math.round(totalPrice * 100);
+
     if (isNaN(totalPriceInCents)) {
       console.error("Invalid total price:", totalPriceInCents);
       return;
@@ -20,14 +27,24 @@ export default function StripeCheckoutButton({ totalPrice, items }) {
       body: JSON.stringify({ items, totalPrice: totalPriceInCents }),
     });
 
+    if (!response.ok) {
+      console.error("Failed to create checkout session:", response.statusText);
+      return;
+    }
+
     const session = await response.json();
+
+    if (!session.id) {
+      console.error("Failed to retrieve session id from server response.");
+      return;
+    }
 
     const { error } = await stripe.redirectToCheckout({
       sessionId: session.id,
     });
 
     if (error) {
-      console.error(error.message);
+      console.error("Stripe checkout error:", error.message);
     }
   };
 
