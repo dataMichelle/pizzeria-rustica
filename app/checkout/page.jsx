@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-import StripeCheckoutButton from "@/components/StripeCheckoutButton";
+import { useRouter } from "next/navigation";
 import PayPalCheckout from "@/components/PayPalCheckout";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [tipAmount, setTipAmount] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -19,12 +20,8 @@ export default function CheckoutPage() {
     setTipAmount(storedTip);
   }, []);
 
-  const handleStripeAuth = () => {
-    window.location.href = "/api/auth/stripe";
-  };
-
   const handlePayPalAuth = () => {
-    window.location.href = "/api/auth/paypal";
+    router.push("/api/auth/paypal"); // Using Next.js router for navigation
   };
 
   return (
@@ -67,8 +64,6 @@ export default function CheckoutPage() {
             {cartItems.length > 0 && (
               <>
                 <h3>Choose your payment method</h3>
-                <div className="my-4">
-              
                 <div className="my-4">
                   <button
                     onClick={handlePayPalAuth}
