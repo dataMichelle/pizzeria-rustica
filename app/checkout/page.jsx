@@ -1,13 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import PayPalCheckout from "@/components/PayPalCheckout";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [tipAmount, setTipAmount] = useState(0);
-  const router = useRouter();
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -19,10 +17,6 @@ export default function CheckoutPage() {
     setTotal(storedTotal);
     setTipAmount(storedTip);
   }, []);
-
-  const handlePayPalAuth = () => {
-    router.push("/api/auth/paypal"); // Using Next.js router for navigation
-  };
 
   return (
     <div className="container mx-auto text-center py-12">
@@ -55,25 +49,13 @@ export default function CheckoutPage() {
         </div>
 
         <div className="w-full md:w-1/2">
-          <form id="checkout-form">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Form fields for name, email, etc. */}
+          {/* Replace form with PayPal buttons */}
+          {cartItems.length > 0 && (
+            <div className="my-4">
+              {/* Render PayPal buttons here */}
+              <PayPalCheckout totalPrice={total} />
             </div>
-
-            {/* Display Payment Buttons */}
-            {cartItems.length > 0 && (
-              <>
-                <div className="my-4">
-                  <button
-                    onClick={handlePayPalAuth}
-                    className="btn btn-primary"
-                  >
-                    Checkout with PayPal
-                  </button>
-                </div>
-              </>
-            )}
-          </form>
+          )}
         </div>
       </div>
     </div>

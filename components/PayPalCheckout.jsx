@@ -14,6 +14,13 @@ export default function PayPalCheckout({ totalPrice }) {
   return (
     <PayPalScriptProvider options={{ "client-id": clientId }}>
       <PayPalButtons
+        style={{
+          layout: "vertical", // Shows buttons vertically stacked
+          color: "gold", // Color of the buttons (e.g., gold, blue, silver)
+          shape: "rect", // Shape of the buttons (e.g., rect or pill)
+          label: "paypal", // Label can be "paypal", "pay", "buynow", etc.
+          tagline: false, // Hide tagline under the buttons
+        }}
         createOrder={(data, actions) => {
           return actions.order.create({
             purchase_units: [
@@ -33,6 +40,14 @@ export default function PayPalCheckout({ totalPrice }) {
           alert(
             "There was an issue processing your payment. Please try again."
           );
+        }}
+        fundingSource={undefined} // Ensure all funding sources are allowed
+        funding={{
+          allowed: [
+            window.paypal.FUNDING.PAYPAL,
+            window.paypal.FUNDING.CARD, // Pay with Credit Card option
+            window.paypal.FUNDING.PAYLATER, // Pay Later option
+          ],
         }}
       />
     </PayPalScriptProvider>
