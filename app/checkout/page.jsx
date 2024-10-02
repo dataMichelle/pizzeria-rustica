@@ -19,6 +19,14 @@ export default function CheckoutPage() {
     setTipAmount(storedTip);
   }, []);
 
+  const handleStripeAuth = () => {
+    window.location.href = "/api/auth/stripe";
+  };
+
+  const handlePayPalAuth = () => {
+    window.location.href = "/api/auth/paypal";
+  };
+
   return (
     <div className="container mx-auto text-center py-12">
       <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
@@ -60,10 +68,14 @@ export default function CheckoutPage() {
               <>
                 <h3>Choose your payment method</h3>
                 <div className="my-4">
-                  <StripeCheckoutButton totalPrice={total} items={cartItems} />
-                </div>
+              
                 <div className="my-4">
-                  <PayPalCheckout totalPrice={total} />
+                  <button
+                    onClick={handlePayPalAuth}
+                    className="btn btn-primary"
+                  >
+                    Checkout with PayPal
+                  </button>
                 </div>
               </>
             )}

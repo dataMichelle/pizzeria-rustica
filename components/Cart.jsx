@@ -1,12 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [tip, setTip] = useState(0);
-  const router = useRouter(); // Use router for manual navigation
 
   // Load cart items from localStorage on initial load
   useEffect(() => {
@@ -51,12 +49,7 @@ export default function Cart() {
   // Save the final total to localStorage when proceeding to checkout
   const handleProceedToCheckout = () => {
     const finalAmount = total.toFixed(2);
-    console.log("Final Total Saved:", finalAmount); // Log the final total
     localStorage.setItem("finalTotal", finalAmount); // Save final total including tip to localStorage
-    localStorage.setItem("tip", tip); // Save the tip amount
-
-    // Navigate to the checkout page after saving
-    router.push("/checkout");
   };
 
   if (cartItems.length === 0) {
@@ -64,14 +57,14 @@ export default function Cart() {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto px-2 md:px-4 lg:px-6 my-2">
+    <div className="w-full max-w-xl mx-auto px-4 md:px-6 lg:px-8 my-2">
       <ul className="space-y-4">
         {cartItems.map((item) => (
           <li
             key={item.id}
-            className="flex flex-col md:flex-row justify-start items-start md:items-center border-b pb-4"
+            className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4"
           >
-            <div className="flex-1 w-full">
+            <div className="flex-1">
               <h2 className="text-xl">{item.name}</h2>
               <p className="text-gray-600">${item.price} each</p>
               <div className="flex items-center mt-2">
@@ -90,7 +83,7 @@ export default function Cart() {
                 />
               </div>
             </div>
-            <div className="flex flex-col items-start md:items-end mt-4 md:mt-0 w-full">
+            <div className="flex flex-col items-start md:items-end mt-4 md:mt-0">
               <p className="text-lg font-semibold">
                 Total: ${(item.price * item.quantity).toFixed(2)}
               </p>
@@ -106,13 +99,13 @@ export default function Cart() {
       </ul>
 
       {/* Running Total Section */}
-      <div className="my-8 text-left">
+      <div className="my-8 text-right">
         <p className="text-lg font-semibold">
           Subtotal: ${subtotal.toFixed(2)}
         </p>
         <p className="text-lg font-semibold">Tax: ${tax.toFixed(2)}</p>
 
-        <div className="my-4">
+        <div className="my-4 text-left">
           <label htmlFor="tip" className="block font-semibold mb-2">
             Tip Amount:
           </label>
@@ -120,7 +113,7 @@ export default function Cart() {
             type="number"
             id="tip"
             value={tip}
-            onChange={(e) => setTip(parseFloat(e.target.value) || 0)} // Ensure valid number
+            onChange={(e) => setTip(parseFloat(e.target.value))}
             className="border px-2 py-1 w-24"
             placeholder="Enter tip amount"
           />
@@ -144,12 +137,13 @@ export default function Cart() {
         </button>
 
         {/* Proceed to Checkout Button */}
-        <button
+        <Link
+          href="/checkout"
           className="bg-green-500 text-white px-4 py-2 rounded"
           onClick={handleProceedToCheckout}
         >
           Proceed to Checkout
-        </button>
+        </Link>
       </div>
     </div>
   );
