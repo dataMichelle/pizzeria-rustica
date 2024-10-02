@@ -1,19 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import PayPalCheckout from "@/components/PayPalCheckout";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [tipAmount, setTipAmount] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCart);
-
     const storedTotal = parseFloat(localStorage.getItem("finalTotal")) || 0;
     const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
 
+    setCartItems(storedCart);
     setTotal(storedTotal);
     setTipAmount(storedTip);
   }, []);
@@ -49,7 +50,6 @@ export default function CheckoutPage() {
         </div>
 
         <div className="w-full md:w-1/2">
-          {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
               {/* Render PayPal buttons here */}
