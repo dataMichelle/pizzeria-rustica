@@ -38,7 +38,7 @@ export async function POST(req) {
   } catch (error) {
     console.error("Error creating Stripe session:", error); // Log error details
     return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+      status: error.statusCode || 500,
       headers: { "Content-Type": "application/json" },
     });
   }
