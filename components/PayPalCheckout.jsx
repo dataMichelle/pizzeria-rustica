@@ -1,25 +1,18 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export default function PayPalCheckout({ totalPrice }) {
-  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-
-  // Ensure the clientId is being loaded correctly
-  if (!clientId) {
-    console.error(
-      "PayPal Client ID is missing. Check your environment variables."
-    );
-    return <p>Error loading payment options. Please try again later.</p>;
-  }
+  // Replace with your actual PayPal client ID for production
+  const clientId = "YOUR_PAYPAL_CLIENT_ID"; // Hardcoded for testing
 
   return (
     <PayPalScriptProvider options={{ "client-id": clientId }}>
       <PayPalButtons
         style={{
-          layout: "vertical", // Shows buttons vertically stacked
-          color: "gold", // Color of the buttons (e.g., gold, blue, silver)
-          shape: "rect", // Shape of the buttons (e.g., rect or pill)
-          label: "paypal", // Label can be "paypal", "pay", "buynow", etc.
-          tagline: false, // Hide tagline under the buttons
+          layout: "vertical",
+          color: "gold",
+          shape: "rect",
+          label: "paypal",
+          tagline: false,
         }}
         createOrder={(data, actions) => {
           return actions.order.create({
