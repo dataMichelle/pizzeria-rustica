@@ -6,10 +6,13 @@ import {
 import { useEffect } from "react";
 
 function PayPalButtonWrapper({ totalPrice }) {
-  const [{ isPending, isRejected }, dispatch] = usePayPalScriptReducer();
+  const [{ isPending, isRejected, options }, dispatch] =
+    usePayPalScriptReducer();
 
   useEffect(() => {
-    // Set up the PayPal script dynamically
+    console.log("Setting PayPal script options...");
+
+    // Dispatch to reset the options and ensure PayPal script is loaded with the correct client ID
     dispatch({
       type: "resetOptions",
       value: {
@@ -20,12 +23,16 @@ function PayPalButtonWrapper({ totalPrice }) {
   }, [dispatch]);
 
   if (isPending) {
+    console.log("PayPal script is pending...");
     return <p>Loading payment options...</p>;
   }
 
   if (isRejected) {
+    console.error("PayPal script failed to load.");
     return <p>Error loading PayPal script. Please try again later.</p>;
   }
+
+  console.log("PayPal script loaded, rendering buttons...");
 
   return (
     <PayPalButtons
@@ -37,6 +44,7 @@ function PayPalButtonWrapper({ totalPrice }) {
         tagline: false,
       }}
       createOrder={(data, actions) => {
+        console.log("Creating PayPal order...");
         return actions.order.create({
           purchase_units: [
             {
@@ -46,6 +54,7 @@ function PayPalButtonWrapper({ totalPrice }) {
         });
       }}
       onApprove={(data, actions) => {
+        console.log("Order approved, capturing payment...");
         return actions.order.capture().then((details) => {
           alert("Transaction completed by " + details.payer.name.given_name);
         });
@@ -67,6 +76,8 @@ export default function PayPalCheckout({ totalPrice }) {
     );
     return <p>Error loading payment options. Please try again later.</p>;
   }
+
+  console.log("Rendering PayPalCheckout with Client ID:", clientId);
 
   return (
     <PayPalScriptProvider options={{ "client-id": clientId }}>
