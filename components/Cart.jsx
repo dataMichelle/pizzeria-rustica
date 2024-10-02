@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation"; // Use this for programmatic routing
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [tip, setTip] = useState(0);
+  const router = useRouter(); // Initialize the router
 
   // Load cart items from localStorage on initial load
   useEffect(() => {
@@ -50,6 +51,9 @@ export default function Cart() {
   const handleProceedToCheckout = () => {
     const finalAmount = total.toFixed(2);
     localStorage.setItem("finalTotal", finalAmount); // Save final total including tip to localStorage
+
+    // Programmatically navigate to the checkout page
+    router.push("/checkout");
   };
 
   if (cartItems.length === 0) {
@@ -137,13 +141,12 @@ export default function Cart() {
         </button>
 
         {/* Proceed to Checkout Button */}
-        <Link
-          href="/checkout"
+        <button
           className="bg-green-500 text-white px-4 py-2 rounded"
           onClick={handleProceedToCheckout}
         >
           Proceed to Checkout
-        </Link>
+        </button>
       </div>
     </div>
   );
