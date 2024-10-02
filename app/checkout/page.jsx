@@ -63,7 +63,6 @@ export default function CheckoutPage() {
             {/* Display Payment Buttons */}
             {cartItems.length > 0 && (
               <>
-                <h3>Choose your payment method</h3>
                 <div className="my-4">
                   <button
                     onClick={handlePayPalAuth}
