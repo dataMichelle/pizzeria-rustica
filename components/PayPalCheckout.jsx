@@ -4,7 +4,6 @@ import { useEffect } from "react";
 export default function PayPalCheckout({ totalPrice }) {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
-  // Check if clientId is available
   useEffect(() => {
     if (!clientId) {
       console.error(
@@ -24,18 +23,20 @@ export default function PayPalCheckout({ totalPrice }) {
       options={{
         "client-id": clientId,
         currency: "USD",
+        intent: "capture", // Ensuring capture payment intent
+        "data-client-token": clientId, // Ensuring token is passed
+        "disable-funding": "credit,paylater", // Ensure that Pay Later and Credit are disabled for now
       }}
     >
       <PayPalButtons
         style={{
-          layout: "vertical", // Shows buttons vertically stacked
-          color: "gold", // Color of the buttons
-          shape: "rect", // Shape of the buttons
-          label: "paypal", // Default label
-          tagline: false, // Hide tagline under the buttons
+          layout: "vertical",
+          color: "gold",
+          shape: "rect",
+          label: "paypal",
+          tagline: false,
         }}
         createOrder={(data, actions) => {
-          console.log("Creating PayPal order...");
           return actions.order.create({
             purchase_units: [
               {
@@ -45,7 +46,6 @@ export default function PayPalCheckout({ totalPrice }) {
           });
         }}
         onApprove={(data, actions) => {
-          console.log("Order approved, capturing payment...");
           return actions.order.capture().then((details) => {
             alert("Transaction completed by " + details.payer.name.given_name);
           });
