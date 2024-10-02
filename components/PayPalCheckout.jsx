@@ -1,16 +1,65 @@
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { useEffect, useState } from "react";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer,
+} from "@paypal/react-paypal-js";
+import { useEffect } from "react";
 
-export default function PayPalCheckout({ totalPrice }) {
-  const [fundingSources, setFundingSources] = useState(null);
-  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+function PayPalButtonWrapper({ totalPrice }) {
+  const [{ isPending, isRejected }, dispatch] = usePayPalScriptReducer();
 
   useEffect(() => {
-    // Wait until PayPal SDK is loaded before accessing funding options
-    if (window.paypal) {
-      setFundingSources(window.paypal.FUNDING);
-    }
-  }, []);
+    // Set up the PayPal script dynamically
+    dispatch({
+      type: "resetOptions",
+      value: {
+        "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+        currency: "USD",
+      },
+    });
+  }, [dispatch]);
+
+  if (isPending) {
+    return <p>Loading payment options...</p>;
+  }
+
+  if (isRejected) {
+    return <p>Error loading PayPal script. Please try again later.</p>;
+  }
+
+  return (
+    <PayPalButtons
+      style={{
+        layout: "vertical",
+        color: "gold",
+        shape: "rect",
+        label: "paypal",
+        tagline: false,
+      }}
+      createOrder={(data, actions) => {
+        return actions.order.create({
+          purchase_units: [
+            {
+              amount: { value: totalPrice.toFixed(2) },
+            },
+          ],
+        });
+      }}
+      onApprove={(data, actions) => {
+        return actions.order.capture().then((details) => {
+          alert("Transaction completed by " + details.payer.name.given_name);
+        });
+      }}
+      onError={(err) => {
+        console.error("PayPal Checkout error:", err);
+        alert("There was an issue processing your payment. Please try again.");
+      }}
+    />
+  );
+}
+
+export default function PayPalCheckout({ totalPrice }) {
+  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
   if (!clientId) {
     console.error(
@@ -19,48 +68,9 @@ export default function PayPalCheckout({ totalPrice }) {
     return <p>Error loading payment options. Please try again later.</p>;
   }
 
-  if (!fundingSources) {
-    return <p>Loading PayPal options...</p>; // Ensure SDK is loaded
-  }
-
   return (
     <PayPalScriptProvider options={{ "client-id": clientId }}>
-      <PayPalButtons
-        style={{
-          layout: "vertical", // Shows buttons vertically stacked
-          color: "gold", // Color of the buttons (e.g., gold, blue, silver)
-          shape: "rect", // Shape of the buttons (e.g., rect or pill)
-          label: "paypal", // Label can be "paypal", "pay", "buynow", etc.
-          tagline: false, // Hide tagline under the buttons
-        }}
-        createOrder={(data, actions) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: { value: totalPrice.toFixed(2) },
-              },
-            ],
-          });
-        }}
-        onApprove={(data, actions) => {
-          return actions.order.capture().then((details) => {
-            alert("Transaction completed by " + details.payer.name.given_name);
-          });
-        }}
-        onError={(err) => {
-          console.error("PayPal Checkout error:", err);
-          alert(
-            "There was an issue processing your payment. Please try again."
-          );
-        }}
-        funding={{
-          allowed: [
-            fundingSources.PAYPAL,
-            fundingSources.CARD, // Pay with Credit Card option
-            fundingSources.PAYLATER, // Pay Later option
-          ],
-        }}
-      />
+      <PayPalButtonWrapper totalPrice={totalPrice} />
     </PayPalScriptProvider>
   );
 }
