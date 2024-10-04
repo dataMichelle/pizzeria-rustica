@@ -16,7 +16,7 @@ const PayPalCheckout = ({ totalPrice }) => {
 
   return (
     <div>
-      {isPending ? <div>Loading...</div> : null}
+      {isPending ? <div>Loading PayPal options...</div> : null}
       <PayPalButtons
         style={{ layout: "vertical" }}
         fundingSource="paypal"
