@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const PayPalCheckout = ({ totalPrice }) => {
-  const [{ isPending, options, isRejected }, dispatch] =
-    usePayPalScriptReducer();
+  const [{ isPending, isRejected }, dispatch] = usePayPalScriptReducer();
 
   useEffect(() => {
+    // Hardcoded PayPal Client ID for testing
     dispatch({
       type: "resetOptions",
       value: {
-        "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+        "client-id":
+          "AfHLTGUQnFzN-6J202-_NkR4oNxTPhEanJR9QdiL_m8Qs5AJytZaKTWIjEk5p1Eoa5x4dspZpBKaTdqZ",
         currency: "USD",
       },
     });
@@ -45,15 +46,6 @@ const PayPalCheckout = ({ totalPrice }) => {
         }}
         onCancel={() => {
           console.log("PayPal Checkout onCancel");
-        }}
-        // Use the fundingSource to allow PayPal, Pay Later, and Credit Card
-        fundingSource={undefined} // Allow all available funding sources
-        funding={{
-          allowed: [
-            window.paypal.FUNDING.PAYPAL,
-            window.paypal.FUNDING.CARD,
-            window.paypal.FUNDING.PAYLATER,
-          ],
         }}
       />
     </div>
