@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const PayPalCheckout = ({ totalPrice }) => {
-  const [{ isPending }, dispatch] = usePayPalScriptReducer();
+  const [{ isPending, options, isRejected }, dispatch] =
+    usePayPalScriptReducer();
 
   useEffect(() => {
     dispatch({
@@ -13,6 +14,10 @@ const PayPalCheckout = ({ totalPrice }) => {
       },
     });
   }, [dispatch]);
+
+  if (isRejected) {
+    return <div>Error loading PayPal options. Please try again later.</div>;
+  }
 
   return (
     <div>
