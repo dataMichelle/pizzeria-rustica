@@ -24,6 +24,8 @@ export default function CheckoutPage() {
 
       <div className="flex flex-col md:flex-row md:space-x-10">
         <div className="w-full md:w-1/2 bg-gray-100 p-6 rounded-lg shadow-md">
+          console.log("PayPal Client ID:",
+          process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
           <h2 className="text-2xl font-bold mb-4">Your Order</h2>
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
@@ -40,7 +42,6 @@ export default function CheckoutPage() {
               ))}
             </ul>
           )}
-
           {/* Order Total with Tip and Tax */}
           <p className="font-semibold text-lg mt-2">
             Tip: ${tipAmount.toFixed(2)}
