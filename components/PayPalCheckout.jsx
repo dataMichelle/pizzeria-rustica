@@ -6,22 +6,24 @@ const PayPalCheckout = ({ totalPrice }) => {
     usePayPalScriptReducer();
 
   useEffect(() => {
-    try {
-      console.log(
-        "PayPal Client ID:",
-        process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
-      ); // Debug: Check if the Client ID is available
+    const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
-      dispatch({
-        type: "resetOptions",
-        value: {
-          "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-          currency: "USD",
-        },
-      });
-    } catch (err) {
-      console.error("Error loading PayPal options:", err);
+    if (!clientId) {
+      console.error(
+        "PayPal Client ID is missing. Check your environment variables."
+      );
+      return;
     }
+
+    console.log("PayPal Client ID:", clientId); // Verify Client ID
+
+    dispatch({
+      type: "resetOptions",
+      value: {
+        "client-id": clientId,
+        currency: "USD",
+      },
+    });
   }, [dispatch]);
 
   if (isRejected) {
