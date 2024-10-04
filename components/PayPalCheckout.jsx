@@ -24,7 +24,6 @@ const PayPalCheckout = ({ totalPrice }) => {
       {isPending ? <div>Loading PayPal options...</div> : null}
       <PayPalButtons
         style={{ layout: "vertical" }}
-        fundingSource="paypal"
         createOrder={(data, actions) => {
           return actions.order.create({
             purchase_units: [
@@ -47,57 +46,14 @@ const PayPalCheckout = ({ totalPrice }) => {
         onCancel={() => {
           console.log("PayPal Checkout onCancel");
         }}
-      />
-      <PayPalButtons
-        style={{ layout: "vertical" }}
-        fundingSource="paylater"
-        createOrder={(data, actions) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  value: totalPrice.toFixed(2),
-                },
-              },
-            ],
-          });
-        }}
-        onApprove={(data, actions) => {
-          return actions.order.capture().then((details) => {
-            alert("Transaction completed by " + details.payer.name.given_name);
-          });
-        }}
-        onError={(err) => {
-          console.error("PayPal Pay Later onError", err);
-        }}
-        onCancel={() => {
-          console.log("PayPal Pay Later onCancel");
-        }}
-      />
-      <PayPalButtons
-        style={{ layout: "vertical" }}
-        fundingSource="card"
-        createOrder={(data, actions) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  value: totalPrice.toFixed(2),
-                },
-              },
-            ],
-          });
-        }}
-        onApprove={(data, actions) => {
-          return actions.order.capture().then((details) => {
-            alert("Transaction completed by " + details.payer.name.given_name);
-          });
-        }}
-        onError={(err) => {
-          console.error("PayPal Credit Card onError", err);
-        }}
-        onCancel={() => {
-          console.log("PayPal Credit Card onCancel");
+        // Use the fundingSource to allow PayPal, Pay Later, and Credit Card
+        fundingSource={undefined} // Allow all available funding sources
+        funding={{
+          allowed: [
+            window.paypal.FUNDING.PAYPAL,
+            window.paypal.FUNDING.CARD,
+            window.paypal.FUNDING.PAYLATER,
+          ],
         }}
       />
     </div>
