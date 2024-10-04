@@ -2,18 +2,26 @@ import { useEffect } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const PayPalCheckout = ({ totalPrice }) => {
-  const [{ isPending, isRejected }, dispatch] = usePayPalScriptReducer();
+  const [{ isPending, options, isRejected }, dispatch] =
+    usePayPalScriptReducer();
 
   useEffect(() => {
-    // Hardcoded PayPal Client ID for testing
-    dispatch({
-      type: "resetOptions",
-      value: {
-        "client-id":
-          "AfHLTGUQnFzN-6J202-_NkR4oNxTPhEanJR9QdiL_m8Qs5AJytZaKTWIjEk5p1Eoa5x4dspZpBKaTdqZ",
-        currency: "USD",
-      },
-    });
+    try {
+      console.log(
+        "PayPal Client ID:",
+        process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
+      ); // Debug: Check if the Client ID is available
+
+      dispatch({
+        type: "resetOptions",
+        value: {
+          "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+          currency: "USD",
+        },
+      });
+    } catch (err) {
+      console.error("Error loading PayPal options:", err);
+    }
   }, [dispatch]);
 
   if (isRejected) {
@@ -22,9 +30,10 @@ const PayPalCheckout = ({ totalPrice }) => {
 
   return (
     <div>
-      {isPending ? <div>Loading PayPal options...</div> : null}
+      {isPending && <div>Loading PayPal options...</div>}
       <PayPalButtons
         style={{ layout: "vertical" }}
+        fundingSource="paypal"
         createOrder={(data, actions) => {
           return actions.order.create({
             purchase_units: [
