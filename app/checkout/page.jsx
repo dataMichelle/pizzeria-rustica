@@ -55,8 +55,11 @@ export default function CheckoutPage() {
           {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
-              {/* Render PayPal buttons here */}{" "}
-              <PayPalScriptProvider>
+              <PayPalScriptProvider
+                options={{
+                  "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                }}
+              >
                 <PayPalCheckout totalPrice={total} />
               </PayPalScriptProvider>
             </div>
