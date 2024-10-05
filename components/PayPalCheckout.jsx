@@ -2,26 +2,15 @@ import { useEffect } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const PayPalCheckout = ({ totalPrice }) => {
-  const [{ isPending, options, isRejected }, dispatch] =
-    usePayPalScriptReducer();
+  const [{ isPending, isRejected }, dispatch] = usePayPalScriptReducer();
 
   useEffect(() => {
-    const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-
-    if (!clientId) {
-      console.error(
-        "PayPal Client ID is missing. Check your environment variables."
-      );
-      return;
-    }
-
-    console.log("PayPal Client ID:", clientId); // Verify Client ID
-
     dispatch({
       type: "resetOptions",
       value: {
-        "client-id": clientId,
+        "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
         currency: "USD",
+        intent: "capture",
       },
     });
   }, [dispatch]);
@@ -33,6 +22,8 @@ const PayPalCheckout = ({ totalPrice }) => {
   return (
     <div>
       {isPending && <div>Loading PayPal options...</div>}
+
+      {/* PayPal Standard Button */}
       <PayPalButtons
         style={{ layout: "vertical" }}
         fundingSource="paypal"
@@ -57,6 +48,62 @@ const PayPalCheckout = ({ totalPrice }) => {
         }}
         onCancel={() => {
           console.log("PayPal Checkout onCancel");
+        }}
+      />
+
+      {/* Pay Later Button */}
+      <PayPalButtons
+        style={{ layout: "vertical" }}
+        fundingSource="paylater"
+        createOrder={(data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  value: totalPrice.toFixed(2),
+                },
+              },
+            ],
+          });
+        }}
+        onApprove={(data, actions) => {
+          return actions.order.capture().then((details) => {
+            alert("Transaction completed by " + details.payer.name.given_name);
+          });
+        }}
+        onError={(err) => {
+          console.error("PayPal Pay Later onError", err);
+        }}
+        onCancel={() => {
+          console.log("PayPal Pay Later onCancel");
+        }}
+      />
+
+      {/* Credit Card Button */}
+      <PayPalButtons
+        style={{ layout: "vertical" }}
+        fundingSource="card"
+        createOrder={(data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  value: totalPrice.toFixed(2),
+                },
+              },
+            ],
+          });
+        }}
+        onApprove={(data, actions) => {
+          return actions.order.capture().then((details) => {
+            alert("Transaction completed by " + details.payer.name.given_name);
+          });
+        }}
+        onError={(err) => {
+          console.error("PayPal Credit Card onError", err);
+        }}
+        onCancel={() => {
+          console.log("PayPal Credit Card onCancel");
         }}
       />
     </div>
