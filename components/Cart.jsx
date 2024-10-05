@@ -132,7 +132,7 @@ export default function Cart() {
         <p className="text-xl font-bold">Total: ${total.toFixed(2)}</p>
       </div>
 
-      <div className="my-12 text-center">
+      <div className="my-12 text-center py-5">
         {/* Return to Menu Link */}
         <Link href="/menu" className="text-blue-500 hover:underline block mb-4">
           Return to Menu
