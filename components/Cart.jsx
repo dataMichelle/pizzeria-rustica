@@ -2,17 +2,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Use this for programmatic routing
 import Link from "next/link";
+import { useCart } from "../path/to/CartContext";
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState([]);
+  const { cartItems, clearCart, removeFromCart, addToCart } = useCart();
   const [tip, setTip] = useState(0);
   const router = useRouter(); // Initialize the router
-
-  // Load cart items from localStorage on initial load
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCart);
-  }, []);
 
   // Update quantity of items in the cart
   const handleQuantityChange = (id, newQuantity) => {
@@ -22,22 +17,12 @@ export default function Cart() {
       }
       return item;
     });
-    setCartItems(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    addToCart(updatedCart);
   };
 
   // Handle removing an item from the cart
   const handleRemoveItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-  };
-
-  // Handle clearing the entire cart
-  const handleClearCart = () => {
-    setCartItems([]); // Clear the state
-    localStorage.removeItem("cart"); // Clear from localStorage
-    alert("Cart has been cleared.");
+    removeFromCart(id);
   };
 
   // Calculate the total price before and after tax
@@ -141,7 +126,7 @@ export default function Cart() {
         {/* Clear Cart Button */}
         <button
           className="bg-yellow-500 text-white px-4 py-2 rounded mr-4 mb-4"
-          onClick={handleClearCart}
+          onClick={clearCart}
         >
           Clear Cart
         </button>
