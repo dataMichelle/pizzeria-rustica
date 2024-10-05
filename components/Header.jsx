@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -60,8 +60,8 @@ export default function Header() {
         <Link href="/orders" className="hover:underline">
           Order Online
         </Link>
-        <Link href="/cart" className="hover:underline">
-          Cart
+        <Link href="/cart" className="hover:underline flex items-center">
+          <FaShoppingCart className="text-xl" />
         </Link>
       </nav>
 
@@ -77,8 +77,12 @@ export default function Header() {
           <Link href="/orders" onClick={toggleMenu} className="hover:underline">
             Order Online
           </Link>
-          <Link href="/cart" onClick={toggleMenu} className="hover:underline">
-            Cart
+          <Link
+            href="/cart"
+            onClick={toggleMenu}
+            className="hover:underline flex items-center"
+          >
+            <FaShoppingCart className="text-xl" />
           </Link>
         </div>
       )}
