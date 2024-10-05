@@ -21,8 +21,10 @@ export default function CheckoutPage() {
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
 
-    // Debugging to ensure that the PayPal Client ID is loaded
-    console.log("PayPal Client ID:", process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
+    // Debugging to ensure that the values are loaded correctly
+    console.log("Stored Total:", storedTotal);
+    console.log("Stored Tip:", storedTip);
+    console.log("Stored Tax:", storedTax);
   }, []);
 
   return (
