@@ -1,15 +1,26 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // Load cart items from localStorage on initial load
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const itemCount = storedCart.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    setCartItemCount(itemCount);
+  }, []);
 
   return (
     <header className="relative bg-black text-white p-5 flex items-center justify-between h-auto md:h-[110px] px-10">
@@ -50,7 +61,7 @@ export default function Header() {
       </button>
 
       {/* Right Section - Desktop Navigation */}
-      <nav className="hidden md:flex space-x-7">
+      <nav className="hidden md:flex space-x-7 items-center">
         <Link href="/" className="hover:underline">
           Home
         </Link>
@@ -60,8 +71,16 @@ export default function Header() {
         <Link href="/orders" className="hover:underline">
           Order Online
         </Link>
-        <Link href="/cart" className="hover:underline flex items-center">
+        <Link
+          href="/cart"
+          className="hover:underline relative flex items-center"
+        >
           <FaShoppingCart className="text-xl" />
+          {cartItemCount > 0 && (
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+              {cartItemCount}
+            </span>
+          )}
         </Link>
       </nav>
 
@@ -83,6 +102,11 @@ export default function Header() {
             className="hover:underline flex items-center"
           >
             <FaShoppingCart className="text-xl" />
+            {cartItemCount > 0 && (
+              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                {cartItemCount}
+              </span>
+            )}
           </Link>
         </div>
       )}
