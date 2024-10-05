@@ -1,32 +1,22 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "../path/to/CartContext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [cartItemCount, setCartItemCount] = useState(0);
+  const { cartItems } = useCart();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Load cart items from localStorage on initial load
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCart);
-  }, []);
-
-  // Update cart item count whenever cartItems state changes
-  useEffect(() => {
-    const itemCount = cartItems.reduce(
-      (total, item) => total + item.quantity,
-      0
-    );
-    setCartItemCount(itemCount);
-  }, [cartItems]);
+  const cartItemCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   return (
     <header className="relative bg-black text-white p-5 flex items-center justify-between h-auto md:h-[110px] px-10">
