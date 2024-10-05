@@ -118,8 +118,8 @@ export default function Cart() {
           <input
             type="number"
             id="tip"
-            value={tip}
-            onChange={(e) => setTip(parseFloat(e.target.value))}
+            value={isNaN(tip) ? 0 : tip}
+            onChange={(e) => setTip(parseFloat(e.target.value) || 0)}
             className="border px-2 py-1 w-24"
             placeholder="Enter tip amount"
           />
