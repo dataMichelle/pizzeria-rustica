@@ -148,7 +148,7 @@ export default function Cart() {
 
         {/* Proceed to Checkout Button */}
         <button
-          className="bg-green-500 text-white px-4 my-5 rounded"
+          className="bg-green-500 text-white px-4 py-2 my-5 rounded"
           onClick={handleProceedToCheckout}
         >
           Proceed to Checkout
