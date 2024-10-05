@@ -6,6 +6,7 @@ import Image from "next/image";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
   const [cartItemCount, setCartItemCount] = useState(0);
 
   const toggleMenu = () => {
@@ -15,12 +16,17 @@ export default function Header() {
   // Load cart items from localStorage on initial load
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const itemCount = storedCart.reduce(
+    setCartItems(storedCart);
+  }, []);
+
+  // Update cart item count whenever cartItems state changes
+  useEffect(() => {
+    const itemCount = cartItems.reduce(
       (total, item) => total + item.quantity,
       0
     );
     setCartItemCount(itemCount);
-  }, []);
+  }, [cartItems]);
 
   return (
     <header className="relative bg-black text-white p-5 flex items-center justify-between h-auto md:h-[110px] px-10">
