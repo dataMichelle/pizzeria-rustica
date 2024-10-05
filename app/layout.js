@@ -2,7 +2,6 @@ import { Oswald, Inter, Merienda, Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 // Importing Oswald and Inter fonts with custom weights and subsets
 const oswald = Oswald({
@@ -35,12 +34,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${oswald.className} ${inter.className}`}>
         <Header />
-        <PayPalScriptProvider
-          options={{ "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID }}
-        >
-          {children}
-          <Footer />
-        </PayPalScriptProvider>
+        {children}
+        <Footer />
       </body>
     </html>
   );

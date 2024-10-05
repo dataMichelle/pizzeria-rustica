@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import PayPalCheckout from "@/components/PayPalCheckout";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -16,6 +17,9 @@ export default function CheckoutPage() {
 
     setTotal(storedTotal);
     setTipAmount(storedTip);
+
+    // Debugging to ensure that the PayPal Client ID is loaded
+    console.log("PayPal Client ID:", process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
   }, []);
 
   return (
@@ -24,8 +28,6 @@ export default function CheckoutPage() {
 
       <div className="flex flex-col md:flex-row md:space-x-10">
         <div className="w-full md:w-1/2 bg-gray-100 p-6 rounded-lg shadow-md">
-          console.log("PayPal Client ID:",
-          process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
           <h2 className="text-2xl font-bold mb-4">Your Order</h2>
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
@@ -53,8 +55,10 @@ export default function CheckoutPage() {
           {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
-              {/* Render PayPal buttons here */}
-              <PayPalCheckout totalPrice={total} />
+              {/* Render PayPal buttons here */}{" "}
+              <PayPalScriptProvider>
+                <PayPalCheckout totalPrice={total} />
+              </PayPalScriptProvider>
             </div>
           )}
         </div>
