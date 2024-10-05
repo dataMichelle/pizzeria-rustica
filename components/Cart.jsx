@@ -51,6 +51,7 @@ export default function Cart() {
   // Save the final total to localStorage when proceeding to checkout
   const handleProceedToCheckout = () => {
     const finalAmount = total.toFixed(2);
+    const finalTip = tip.toFixed(2);
     localStorage.setItem("finalTotal", finalAmount); // Save final total including tip to localStorage
 
     // Programmatically navigate to the checkout page
