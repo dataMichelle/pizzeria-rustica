@@ -115,7 +115,7 @@ export default function Cart() {
         </p>
         <p className="text-lg font-semibold">Tax: ${tax.toFixed(2)}</p>
 
-        <div className="my-4 text-left">
+        <div className="my-4 text-right">
           <label htmlFor="tip" className="block font-semibold mb-2">
             Tip Amount:
           </label>
@@ -124,7 +124,7 @@ export default function Cart() {
             id="tip"
             value={tip}
             onChange={(e) => setTip(parseFloat(e.target.value))}
-            className="border px-2 py-1 w-24"
+            className="border px-2 py-1 w-24 ml-auto"
             placeholder="Enter tip amount"
           />
         </div>
@@ -140,7 +140,7 @@ export default function Cart() {
 
         {/* Clear Cart Button */}
         <button
-          className="bg-yellow-500 text-white px-4 py-2 rounded mr-4"
+          className="bg-yellow-500 text-white px-4 py-2 rounded mr-4 mb-4"
           onClick={handleClearCart}
         >
           Clear Cart
@@ -148,7 +148,7 @@ export default function Cart() {
 
         {/* Proceed to Checkout Button */}
         <button
-          className="bg-green-500 text-white px-4 py-6 rounded"
+          className="bg-green-500 text-white px-4 py-6 rounded mb-4"
           onClick={handleProceedToCheckout}
         >
           Proceed to Checkout
