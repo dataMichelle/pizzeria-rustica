@@ -7,6 +7,7 @@ export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [tipAmount, setTipAmount] = useState(0);
+  const [taxAmount, setTaxAmount] = useState(0);
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -14,9 +15,11 @@ export default function CheckoutPage() {
 
     const storedTotal = parseFloat(localStorage.getItem("finalTotal")) || 0;
     const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
+    const storedTax = parseFloat(localStorage.getItem("tax")) || 0;
 
     setTotal(storedTotal);
     setTipAmount(storedTip);
+    setTaxAmount(storedTax);
 
     // Debugging to ensure that the PayPal Client ID is loaded
     console.log("PayPal Client ID:", process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
@@ -47,6 +50,9 @@ export default function CheckoutPage() {
           {/* Order Total with Tip and Tax */}
           <p className="font-semibold text-lg mt-2">
             Tip: ${tipAmount.toFixed(2)}
+          </p>
+          <p className="font-semibold text-lg mt-2">
+            Tax: ${taxAmount.toFixed(2)}
           </p>
           <p className="font-bold text-xl mt-4">Total: ${total.toFixed(2)}</p>
         </div>

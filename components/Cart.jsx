@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Use this for programmatic routing
 import Link from "next/link";
 
@@ -51,8 +51,12 @@ export default function Cart() {
   // Save the final total to localStorage when proceeding to checkout
   const handleProceedToCheckout = () => {
     const finalAmount = total.toFixed(2);
-    const finalTip = tip.toFixed(2);
-    localStorage.setItem("finalTotal", finalAmount); // Save final total including tip to localStorage
+    const calculatedTax = tax.toFixed(2);
+    const calculatedTip = tip.toFixed(2);
+
+    localStorage.setItem("finalTotal", finalAmount); // Save final total including tip and tax to localStorage
+    localStorage.setItem("tip", calculatedTip); // Save the tip to localStorage
+    localStorage.setItem("tax", calculatedTax); // Save the tax to localStorage
 
     // Programmatically navigate to the checkout page
     router.push("/checkout");
@@ -118,8 +122,8 @@ export default function Cart() {
           <input
             type="number"
             id="tip"
-            value={isNaN(tip) ? 0 : tip}
-            onChange={(e) => setTip(parseFloat(e.target.value) || 0)}
+            value={tip}
+            onChange={(e) => setTip(parseFloat(e.target.value))}
             className="border px-2 py-1 w-24"
             placeholder="Enter tip amount"
           />
