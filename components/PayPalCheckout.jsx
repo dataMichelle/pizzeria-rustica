@@ -21,6 +21,27 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     return <div>Error loading PayPal options. Please try again later.</div>;
   }
 
+  const createOrder = (data, actions) => {
+    const totalAmount = (
+      parseFloat(totalPrice) + parseFloat(tipAmount)
+    ).toFixed(2);
+
+    if (isNaN(totalAmount)) {
+      console.error("Invalid total amount:", totalAmount);
+      return;
+    }
+
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: totalAmount,
+          },
+        },
+      ],
+    });
+  };
+
   return (
     <div>
       {isPending && <div>Loading PayPal options...</div>}
@@ -33,17 +54,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
             <PayPalButtons
               style={{ layout: "vertical" }}
               fundingSource="paypal"
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        value: (totalPrice + tipAmount).toFixed(2),
-                      },
-                    },
-                  ],
-                });
-              }}
+              createOrder={createOrder}
               onApprove={(data, actions) => {
                 return actions.order.capture().then((details) => {
                   alert(
@@ -65,17 +76,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
             <PayPalButtons
               style={{ layout: "vertical" }}
               fundingSource="paylater"
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        value: (totalPrice + tipAmount).toFixed(2),
-                      },
-                    },
-                  ],
-                });
-              }}
+              createOrder={createOrder}
               onApprove={(data, actions) => {
                 return actions.order.capture().then((details) => {
                   alert(
@@ -97,17 +98,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
             <PayPalButtons
               style={{ layout: "vertical" }}
               fundingSource="card"
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        value: (totalPrice + tipAmount).toFixed(2),
-                      },
-                    },
-                  ],
-                });
-              }}
+              createOrder={createOrder}
               onApprove={(data, actions) => {
                 return actions.order.capture().then((details) => {
                   alert(
