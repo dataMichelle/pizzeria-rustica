@@ -7,6 +7,10 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
   // Ensure the PayPal script reloads correctly when needed
   useEffect(() => {
+    console.log(
+      "Dispatching resetOptions with client-id:",
+      process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
+    );
     dispatch({
       type: "resetOptions",
       value: {
@@ -18,6 +22,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   }, [dispatch]);
 
   if (isRejected) {
+    console.error("PayPal script loading rejected");
     return <div>Error loading PayPal options. Please try again later.</div>;
   }
 
@@ -58,7 +63,6 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     <div>
       {isPending && <div>Loading PayPal options...</div>}
 
-      {/* PayPal Buttons - Wrapping them in conditionals to avoid multiple renders */}
       {!isPending && (
         <>
           {/* PayPal Standard Button */}
