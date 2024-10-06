@@ -29,9 +29,9 @@ export default function PizzaCard({ pizza }) {
   };
 
   return (
-    <div className="flex border-b-2 p-4 mx-85 h-full items-end">
+    <div className="flex flex-col md:flex-row border-b-2 p-4 mx-2 md:mx-4 h-full items-start md:items-end">
       {/* Pizza Image */}
-      <div className="mr-4">
+      <div className="mr-0 md:mr-4 mb-4 md:mb-0">
         <Image
           src={pizza.image}
           alt={pizza.name}
@@ -42,8 +42,8 @@ export default function PizzaCard({ pizza }) {
       </div>
 
       {/* Pizza Information and Add to Cart Button */}
-      <div className="flex flex-1 justify-between items-end">
-        <div className="flex flex-col">
+      <div className="flex flex-1 flex-col md:flex-row justify-between items-start md:items-end">
+        <div className="flex flex-col mb-4 md:mb-0">
           <h3 className="text-lg font-semibold">{pizza.name}</h3>
           <p className="text-sm">{pizza.description}</p>
           <p className="text-sm">Price: ${pizza.price}</p>
