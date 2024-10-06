@@ -95,7 +95,7 @@ export default function Header() {
           <Link
             href="/cart"
             onClick={toggleMenu}
-            className="hover:underline flex items-center"
+            className="hover:underline relative flex items-center"
           >
             <FaShoppingCart className="text-xl" />
             {cartItemCount > 0 && (
