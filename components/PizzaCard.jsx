@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { useCart } from "../components/CartContext";
+import { useCart } from "@/components/CartContext"; // Ensure the import path is correct
 
 export default function PizzaCard({ pizza }) {
   const [quantity, setQuantity] = useState(1);
