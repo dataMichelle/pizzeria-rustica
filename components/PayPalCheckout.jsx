@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
-const PayPalCheckout = ({ totalPrice }) => {
+const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   const [{ isPending, isRejected, options }, dispatch] =
     usePayPalScriptReducer();
-  const [tipAmount, setTipAmount] = useState(0); // Initialize tip amount
 
   // Ensure the PayPal script reloads correctly when needed
   useEffect(() => {
@@ -22,32 +21,9 @@ const PayPalCheckout = ({ totalPrice }) => {
     return <div>Error loading PayPal options. Please try again later.</div>;
   }
 
-  // Handle tip amount change
-  const handleTipChange = (e) => {
-    const value = parseFloat(e.target.value);
-    if (!isNaN(value)) {
-      setTipAmount(value);
-    } else {
-      setTipAmount(0);
-    }
-  };
-
   return (
     <div>
       {isPending && <div>Loading PayPal options...</div>}
-
-      {/* Tip Input */}
-      <div style={{ padding: "20px" }}>
-        <label htmlFor="tip">Tip Amount:</label>
-        <input
-          type="number"
-          id="tip"
-          value={tipAmount}
-          onChange={handleTipChange}
-          min="0"
-          step="0.01"
-        />
-      </div>
 
       {/* PayPal Buttons - Wrapping them in conditionals to avoid multiple renders */}
       {!isPending && (
