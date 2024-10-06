@@ -31,15 +31,19 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
       return;
     }
 
-    return actions.order.create({
-      purchase_units: [
-        {
-          amount: {
-            value: totalAmount,
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: totalAmount,
+            },
           },
-        },
-      ],
-    });
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
   };
 
   return (
