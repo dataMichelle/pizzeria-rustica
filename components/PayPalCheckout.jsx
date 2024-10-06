@@ -17,6 +17,10 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     });
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log("PayPal script status:", { isPending, isRejected, options });
+  }, [isPending, isRejected, options]);
+
   if (isRejected) {
     return <div>Error loading PayPal options. Please try again later.</div>;
   }
