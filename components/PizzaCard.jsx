@@ -1,26 +1,19 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { useCart } from "../path/to/CartContext"; // Adjust the import path as needed
 
 export default function PizzaCard({ pizza }) {
   const [quantity, setQuantity] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false); // For preventing multiple clicks
+  const { addToCart } = useCart(); // Use the addToCart function from the context
 
-  const addToCart = async () => {
+  const handleAddToCart = async () => {
     if (isProcessing) return; // Prevent further clicks while processing
 
     setIsProcessing(true); // Disable button
 
-    const currentCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const itemIndex = currentCart.findIndex((item) => item.id === pizza.id);
-
-    if (itemIndex > -1) {
-      currentCart[itemIndex].quantity += quantity;
-    } else {
-      currentCart.push({ ...pizza, quantity });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(currentCart));
+    addToCart({ ...pizza, quantity });
 
     // Non-blocking alert
     setTimeout(() => {
@@ -77,7 +70,7 @@ export default function PizzaCard({ pizza }) {
             className={`py-2 px-4 rounded-full ml-4 hover:bg-opacity-90 transition duration-300 text-xs uppercase font-medium tracking-wider ${
               isProcessing ? "opacity-50 cursor-not-allowed" : ""
             }`}
-            onClick={addToCart}
+            onClick={handleAddToCart}
             disabled={isProcessing} // Disable button while processing
           >
             {isProcessing ? "Processing..." : "Add to Cart"}

@@ -16,13 +16,14 @@ export function CartProvider({ children }) {
 
   const addToCart = (item) => {
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
-      if (existingItem) {
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
-        );
+      const itemIndex = prevItems.findIndex((i) => i.id === item.id);
+      if (itemIndex > -1) {
+        const updatedItems = [...prevItems];
+        updatedItems[itemIndex].quantity += item.quantity;
+        return updatedItems;
+      } else {
+        return [...prevItems, item];
       }
-      return [...prevItems, item];
     });
   };
 
