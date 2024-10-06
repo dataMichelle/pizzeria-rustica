@@ -22,11 +22,15 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   }
 
   const createOrder = (data, actions) => {
-    const totalAmount = (
-      parseFloat(totalPrice) + parseFloat(tipAmount)
-    ).toFixed(2);
+    const parsedTotalPrice = parseFloat(totalPrice);
+    const parsedTipAmount = parseFloat(tipAmount);
+    const totalAmount = (parsedTotalPrice + parsedTipAmount).toFixed(2);
 
-    if (isNaN(totalAmount)) {
+    if (
+      isNaN(parsedTotalPrice) ||
+      isNaN(parsedTipAmount) ||
+      isNaN(totalAmount)
+    ) {
       console.error("Invalid total amount:", totalAmount);
       return;
     }
