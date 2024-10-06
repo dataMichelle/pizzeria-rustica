@@ -23,7 +23,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
   const createOrder = (data, actions) => {
     const parsedTotalPrice = parseFloat(totalPrice);
-    const parsedTipAmount = parseFloat(tipAmount);
+    const parsedTipAmount = parseFloat(tipAmount) || 0; // Default to 0 if tipAmount is empty
     const totalAmount = (parsedTotalPrice + parsedTipAmount).toFixed(2);
 
     if (
