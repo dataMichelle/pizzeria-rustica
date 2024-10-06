@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const PayPalCheckout = ({ totalPrice, tipAmount }) => {
-  const [{ isPending, isRejected, options }, dispatch] =
-    usePayPalScriptReducer();
-  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [{ isPending, isRejected }, dispatch] = usePayPalScriptReducer();
 
-  // Ensure the PayPal script reloads correctly when needed
+  // Ensure PayPal options are set correctly
   useEffect(() => {
     dispatch({
       type: "resetOptions",
@@ -18,58 +16,40 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!isPending && !isRejected) {
-      setScriptLoaded(true);
-    }
-  }, [isPending, isRejected]);
-
   if (isRejected) {
     return <div>Error loading PayPal options. Please try again later.</div>;
   }
 
   const createOrder = (data, actions) => {
     const parsedTotalPrice = parseFloat(totalPrice);
-    const parsedTipAmount = parseFloat(tipAmount) || 0; // Default to 0 if tipAmount is empty
+    const parsedTipAmount = parseFloat(tipAmount) || 0;
     const totalAmount = (parsedTotalPrice + parsedTipAmount).toFixed(2);
 
-    if (
-      isNaN(parsedTotalPrice) ||
-      isNaN(parsedTipAmount) ||
-      isNaN(totalAmount)
-    ) {
+    if (isNaN(totalAmount)) {
       console.error("Invalid total amount:", totalAmount);
       return;
     }
 
-    return actions.order
-      .create({
-        purchase_units: [
-          {
-            amount: {
-              value: totalAmount,
-            },
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: totalAmount,
           },
-        ],
-      })
-      .then((orderID) => {
-        return orderID;
-      })
-      .catch((err) => {
-        console.error("Error creating order:", err); // Log any errors
-      });
+        },
+      ],
+    });
   };
 
   return (
     <div>
       {isPending && <div>Loading PayPal options...</div>}
 
-      {scriptLoaded && (
+      {!isPending && (
         <>
-          {/* PayPal Standard Button */}
           <div style={{ padding: "20px" }}>
+            {/* PayPal Standard Button */}
             <PayPalButtons
-              key="paypal"
               style={{ layout: "vertical" }}
               fundingSource="paypal"
               createOrder={createOrder}
@@ -89,10 +69,9 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
             />
           </div>
 
-          {/* Pay Later Button */}
           <div style={{ padding: "20px" }}>
+            {/* Pay Later Button */}
             <PayPalButtons
-              key="paylater"
               style={{ layout: "vertical" }}
               fundingSource="paylater"
               createOrder={createOrder}
@@ -112,10 +91,9 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
             />
           </div>
 
-          {/* Credit Card Button */}
           <div style={{ padding: "20px" }}>
+            {/* Credit Card Button */}
             <PayPalButtons
-              key="card"
               style={{ layout: "vertical" }}
               fundingSource="card"
               createOrder={createOrder}
