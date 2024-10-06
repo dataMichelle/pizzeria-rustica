@@ -15,7 +15,15 @@ export function CartProvider({ children }) {
   }, [cartItems]);
 
   const addToCart = (item) => {
-    setCartItems((prevItems) => [...prevItems, item]);
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((i) => i.id === item.id);
+      if (existingItem) {
+        return prevItems.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
+        );
+      }
+      return [...prevItems, item];
+    });
   };
 
   const removeFromCart = (id) => {

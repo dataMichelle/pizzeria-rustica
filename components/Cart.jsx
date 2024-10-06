@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation"; // Use this for programmatic routing
 import Link from "next/link";
-import { useCart } from "../path/to/CartContext";
+import { useCart } from "@/components/CartContext";
 
 export default function Cart() {
   const { cartItems, clearCart, removeFromCart, addToCart } = useCart();
