@@ -62,6 +62,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
           {/* PayPal Standard Button */}
           <div style={{ padding: "20px" }}>
             <PayPalButtons
+              key="paypal"
               style={{ layout: "vertical" }}
               fundingSource="paypal"
               createOrder={createOrder}
@@ -84,6 +85,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
           {/* Pay Later Button */}
           <div style={{ padding: "20px" }}>
             <PayPalButtons
+              key="paylater"
               style={{ layout: "vertical" }}
               fundingSource="paylater"
               createOrder={createOrder}
@@ -106,6 +108,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
           {/* Credit Card Button */}
           <div style={{ padding: "20px" }}>
             <PayPalButtons
+              key="card"
               style={{ layout: "vertical" }}
               fundingSource="card"
               createOrder={createOrder}
