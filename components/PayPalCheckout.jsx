@@ -7,10 +7,6 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
   // Ensure the PayPal script reloads correctly when needed
   useEffect(() => {
-    console.log(
-      "Dispatching resetOptions with client-id:",
-      process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
-    );
     dispatch({
       type: "resetOptions",
       value: {
@@ -21,12 +17,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log("PayPal script status:", { isPending, isRejected, options });
-  }, [isPending, isRejected, options]);
-
   if (isRejected) {
-    console.error("PayPal script loading rejected");
     return <div>Error loading PayPal options. Please try again later.</div>;
   }
 
@@ -55,7 +46,6 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
         ],
       })
       .then((orderID) => {
-        console.log("Order ID created:", orderID); // Log the order ID
         return orderID;
       })
       .catch((err) => {
