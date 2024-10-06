@@ -20,11 +20,6 @@ export default function CheckoutPage() {
     setTotal(storedTotal);
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
-
-    // Debugging to ensure that the values are loaded correctly
-    console.log("Stored Total:", storedTotal);
-    console.log("Stored Tip:", storedTip);
-    console.log("Stored Tax:", storedTax);
   }, []);
 
   return (
