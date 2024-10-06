@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   const [{ isPending, isRejected, options }, dispatch] =
     usePayPalScriptReducer();
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   // Ensure the PayPal script reloads correctly when needed
   useEffect(() => {
@@ -18,8 +19,10 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("PayPal script status:", { isPending, isRejected, options });
-  }, [isPending, isRejected, options]);
+    if (!isPending && !isRejected) {
+      setScriptLoaded(true);
+    }
+  }, [isPending, isRejected]);
 
   if (isRejected) {
     return <div>Error loading PayPal options. Please try again later.</div>;
@@ -61,7 +64,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     <div>
       {isPending && <div>Loading PayPal options...</div>}
 
-      {!isPending && (
+      {scriptLoaded && (
         <>
           {/* PayPal Standard Button */}
           <div style={{ padding: "20px" }}>
