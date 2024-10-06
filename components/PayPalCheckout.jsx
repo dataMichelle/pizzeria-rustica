@@ -46,7 +46,11 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
         ],
       })
       .then((orderID) => {
+        console.log("Order ID created:", orderID); // Log the order ID
         return orderID;
+      })
+      .catch((err) => {
+        console.error("Error creating order:", err); // Log any errors
       });
   };
 
