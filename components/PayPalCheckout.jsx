@@ -23,6 +23,15 @@ export default function CheckoutPage() {
     setTotal(storedTotal + storedTip + storedTax);
   }, []);
 
+  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
+  if (!clientId) {
+    console.error(
+      "PayPal Client ID is not defined. Please check your environment variables."
+    );
+    return <div>Error: PayPal Client ID is not defined.</div>;
+  }
+
   return (
     <div className="container mx-auto text-center py-12">
       <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
@@ -59,14 +68,12 @@ export default function CheckoutPage() {
           {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
-              console.log("PayPal Client ID:",
-              process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
               <PayPalScriptProvider
                 options={{
-                  "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                  "client-id": clientId,
                 }}
               >
-                <PayPalCheckout totalPrice={total} />
+                <PayPalCheckout totalPrice={total} tipAmount={tipAmount} />
               </PayPalScriptProvider>
             </div>
           )}
