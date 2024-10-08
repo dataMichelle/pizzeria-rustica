@@ -23,7 +23,7 @@ export async function POST(req) {
           product_data: {
             name: item.name,
           },
-          unit_amount: item.price * 100, // Price in cents
+          unit_amount: Math.round(item.price * 100), // Price in cents
         },
         quantity: item.quantity,
       })),
@@ -34,16 +34,13 @@ export async function POST(req) {
 
     console.log("Stripe session created:", session); // Log session details
 
-    return new Response(JSON.stringify({ id: session.id }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json({ id: session.id }, { status: 200 });
   } catch (error) {
     console.error("Error creating Stripe session:", error); // Log error details
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: error.statusCode || 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(
+      { error: error.message },
+      { status: error.statusCode || 500 }
+    );
   }
 }
 
