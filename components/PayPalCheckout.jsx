@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
@@ -60,6 +58,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
         ],
       })
       .then((orderID) => {
+        console.log("Order created successfully:", orderID);
         return orderID;
       })
       .catch((err) => {
@@ -71,6 +70,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     return actions.order
       .capture()
       .then((details) => {
+        console.log("Order captured successfully:", details);
         alert("Transaction completed by " + details.payer.name.given_name);
       })
       .catch((err) => {
