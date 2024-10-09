@@ -9,7 +9,7 @@ export default function CheckoutPage() {
   const [tipAmount, setTipAmount] = useState(0);
   const [taxAmount, setTaxAmount] = useState(0);
 
-  // Load cart, tip, and tax data from localStorage only once
+  // Load data once and set state only once during component mount
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
@@ -17,20 +17,21 @@ export default function CheckoutPage() {
     const storedFinalTotal =
       parseFloat(localStorage.getItem("finalTotal")) || 0;
 
-    // Set cart items and amounts once on page load
+    // Calculate total only once and set state values
+    const calculatedTotal = storedFinalTotal + storedTip + storedTax;
+
+    // Update state only once to prevent re-render loops
     setCartItems(storedCart);
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
-
-    // Calculate and set the total only once, avoid recalculating multiple times
-    const calculatedTotal = storedFinalTotal + storedTip + storedTax;
     setTotal(calculatedTotal);
-  }, []); // Run only on component mount
+  }, []); // Empty dependency array to ensure this runs only once on component mount
 
-  // Log for debugging purposes
+  // Debugging to ensure that the data is being set properly
+  console.log("Cart Items:", cartItems);
   console.log("Total Price:", total);
 
-  // Check for PayPal Client ID from environment
+  // Check for PayPal Client ID
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   if (!clientId) {
     console.error(
