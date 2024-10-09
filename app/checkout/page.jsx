@@ -27,10 +27,6 @@ export default function CheckoutPage() {
     setTotal(calculatedTotal);
   }, []); // Empty dependency array to ensure this runs only once on component mount
 
-  // Debugging to ensure that the data is being set properly
-  console.log("Cart Items:", cartItems);
-  console.log("Total Price:", total);
-
   // Check for PayPal Client ID
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
   if (!clientId) {
