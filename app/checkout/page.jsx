@@ -8,6 +8,7 @@ export default function CheckoutPage() {
   const [total, setTotal] = useState(0);
   const [tipAmount, setTipAmount] = useState(0);
   const [taxAmount, setTaxAmount] = useState(0);
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
 
   // Load data once and set state only once during component mount
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function CheckoutPage() {
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
     setTotal(calculatedTotal);
+    setIsCartLoaded(true);
 
     // Log the loaded data
     console.log("Loaded cart items:", storedCart);
@@ -82,18 +84,22 @@ export default function CheckoutPage() {
 
         {/* PayPal Button Rendering */}
         <div className="w-full md:w-1/2">
-          {cartItems.length > 0 ? (
-            <div className="my-4">
-              <PayPalScriptProvider
-                options={{
-                  "client-id": clientId,
-                }}
-              >
-                <PayPalCheckout totalPrice={total} tipAmount={tipAmount} />
-              </PayPalScriptProvider>
-            </div>
+          {isCartLoaded ? (
+            cartItems.length > 0 ? (
+              <div className="my-4">
+                <PayPalScriptProvider
+                  options={{
+                    "client-id": clientId,
+                  }}
+                >
+                  <PayPalCheckout totalPrice={total} tipAmount={tipAmount} />
+                </PayPalScriptProvider>
+              </div>
+            ) : (
+              console.log("Cart is empty, not rendering PayPal buttons")
+            )
           ) : (
-            console.log("Cart is empty, not rendering PayPal buttons")
+            console.log("Cart data is not loaded yet")
           )}
         </div>
       </div>
