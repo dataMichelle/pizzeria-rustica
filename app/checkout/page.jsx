@@ -19,7 +19,7 @@ export default function CheckoutPage() {
       parseFloat(localStorage.getItem("finalTotal")) || 0;
 
     // Calculate total only once and set state values
-    const calculatedTotal = storedFinalTotal + storedTip + storedTax;
+    const calculatedTotal = storedFinalTotal;
 
     // Update state only once to prevent re-render loops
     setCartItems(storedCart);
