@@ -3,7 +3,7 @@ import { FaFacebookF, FaInstagram, FaYelp, FaGoogle } from "react-icons/fa";
 export default function Footer() {
   return (
     <footer className="bg-black text-white py-10">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left md:px-4">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left md:px-4 md:pb-4">
         {/* Location Section */}
         <div>
           <h3 className="text-lg font-semibold mb-3">Location</h3>
