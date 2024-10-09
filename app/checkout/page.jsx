@@ -11,6 +11,7 @@ export default function CheckoutPage() {
 
   // Load data once and set state only once during component mount
   useEffect(() => {
+    console.log("Loading cart data from localStorage");
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
     const storedTax = parseFloat(localStorage.getItem("tax")) || 0;
@@ -25,6 +26,13 @@ export default function CheckoutPage() {
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
     setTotal(calculatedTotal);
+
+    // Log the loaded data
+    console.log("Loaded cart items:", storedCart);
+    console.log("Loaded tip amount:", storedTip);
+    console.log("Loaded tax amount:", storedTax);
+    console.log("Loaded final total:", storedFinalTotal);
+    console.log("Calculated total:", calculatedTotal);
   }, []); // Empty dependency array to ensure this runs only once on component mount
 
   // Check for PayPal Client ID
@@ -35,6 +43,8 @@ export default function CheckoutPage() {
     );
     return <div>Error: PayPal Client ID is not defined.</div>;
   }
+
+  console.log("PayPal Client ID:", clientId);
 
   return (
     <div className="container mx-auto text-center py-12">
