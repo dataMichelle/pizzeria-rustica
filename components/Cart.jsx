@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useCart } from "@/components/CartContext";
 
 export default function Cart() {
-  const { cartItems, clearCart, removeFromCart, addToCart } = useCart();
+  const { cartItems, clearCart, removeFromCart, updateCart } = useCart();
   const [tip, setTip] = useState(0);
   const router = useRouter(); // Initialize the router
 
@@ -17,7 +17,7 @@ export default function Cart() {
       }
       return item;
     });
-    addToCart(updatedCart);
+    updateCart(updatedCart);
   };
 
   // Handle removing an item from the cart
