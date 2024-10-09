@@ -100,7 +100,6 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
       {scriptLoaded ? (
         <>
-          <div>PayPal script loaded, rendering buttons...</div>
           {/* PayPal Standard Button */}
           <div style={{ padding: "20px" }}>
             <PayPalButtons
