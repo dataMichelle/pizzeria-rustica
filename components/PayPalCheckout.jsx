@@ -20,6 +20,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   }, [dispatch]);
 
   useEffect(() => {
+    console.log("PayPal script loading state:", { isPending, isRejected });
     if (!isPending && !isRejected) {
       console.log("PayPal script loaded successfully");
       setScriptLoaded(true);
@@ -99,6 +100,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
       {scriptLoaded ? (
         <>
+          <div>PayPal script loaded, rendering buttons...</div>
           {/* PayPal Standard Button */}
           <div style={{ padding: "20px" }}>
             <PayPalButtons
