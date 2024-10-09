@@ -8,6 +8,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
   // Ensure the PayPal script reloads correctly when needed
   useEffect(() => {
+    console.log("Resetting PayPal script options");
     dispatch({
       type: "resetOptions",
       value: {
@@ -20,7 +21,10 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
   useEffect(() => {
     if (!isPending && !isRejected) {
+      console.log("PayPal script loaded successfully");
       setScriptLoaded(true);
+    } else if (isRejected) {
+      console.error("Failed to load PayPal script");
     }
   }, [isPending, isRejected]);
 
@@ -47,6 +51,8 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
       return;
     }
 
+    console.log("Creating order with total amount:", totalAmount);
+
     return actions.order
       .create({
         purchase_units: [
@@ -67,6 +73,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   };
 
   const onApprove = (data, actions) => {
+    console.log("Order approved, capturing order");
     return actions.order
       .capture()
       .then((details) => {
