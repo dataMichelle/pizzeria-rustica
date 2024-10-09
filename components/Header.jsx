@@ -22,7 +22,9 @@ export default function Header() {
     <header className="relative bg-black text-white p-5 flex items-center justify-between h-auto md:h-[110px] px-10">
       {/* Logo and Title for Mobile */}
       <div className="flex flex-col items-center md:hidden">
-        <h1 className="text-2xl font-quicksand mb-2">Pizzeria Rustica</h1>
+        <Link href="/">
+          <h1 className="text-2xl font-quicksand mb-2">Pizzeria Rustica</h1>
+        </Link>
         <Link href="/">
           <Image
             src="/logo.png"
@@ -36,7 +38,9 @@ export default function Header() {
 
       {/* Left Section - Pizzeria Rustica for Desktop */}
       <div className="hidden md:flex items-center">
-        <h1 className="text-3xl font-quicksand">Pizzeria Rustica</h1>
+        <Link href="/">
+          <h1 className="text-3xl font-quicksand">Pizzeria Rustica</h1>
+        </Link>
       </div>
 
       {/* Center Section - Logo for Desktop */}
