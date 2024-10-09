@@ -139,7 +139,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
           </div>
         </>
       ) : (
-        console.log("PayPal script not loaded yet")
+        <div>Loading PayPal script...</div>
       )}
     </div>
   );
