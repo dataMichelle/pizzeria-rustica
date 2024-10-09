@@ -61,10 +61,11 @@ export default function CheckoutPage() {
               <PayPalScriptProvider
                 options={{
                   "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-                  currency: "USD",
                 }}
               >
-                <PayPalCheckout totalPrice={total} />
+                <div className="checkout-container">
+                  <PayPalCheckout totalPrice={totalPrice} />
+                </div>
               </PayPalScriptProvider>
             </div>
           )}
