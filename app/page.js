@@ -18,7 +18,7 @@ export default function HomePage() {
             Authentic Italian Pizza. A Slice of Tradition.
           </p>
           <Link
-            href="/menu"
+            href="/orders"
             className="bg-primary py-3 px-6 rounded-full text-black uppercase font-semibold hover:bg-opacity-90 transition duration-300 inline-block"
           >
             Explore Our Menu
@@ -124,7 +124,7 @@ export default function HomePage() {
               doorstep.
             </p>
             <Link
-              href="/menu"
+              href="/orders"
               className="bg-white text-primary px-6 py-3 rounded-full uppercase font-semibold hover:bg-opacity-90 transition duration-300 inline-block"
             >
               Order Now
