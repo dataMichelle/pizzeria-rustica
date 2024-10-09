@@ -16,13 +16,15 @@ export default function CheckoutPage() {
     const storedTax = parseFloat(localStorage.getItem("tax")) || 0;
     const storedTotal = parseFloat(localStorage.getItem("finalTotal")) || 0;
 
+    // Only set state once during initial load
     setCartItems(storedCart);
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
 
-    // Calculate the total including tip and tax
-    setTotal(storedTotal + storedTip + storedTax);
-  }, []);
+    // Adjust total to include tip and tax
+    const finalTotal = storedTotal + storedTip + storedTax;
+    setTotal(finalTotal);
+  }, []); // Empty dependency array ensures this effect only runs once on mount
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
