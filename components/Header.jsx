@@ -21,9 +21,11 @@ export default function Header() {
   return (
     <header className="relative bg-black text-white p-5 flex items-center justify-between h-auto md:h-[110px] px-10">
       {/* Logo and Title for Mobile */}
-      <div className="flex flex-col items-center md:hidden">
+      <div className="flex flex-col items-center justify-center md:hidden w-full">
         <Link href="/">
-          <h1 className="text-2xl font-quicksand mb-2">Pizzeria Rustica</h1>
+          <h1 className="text-2xl font-quicksand mb-2 text-center">
+            Pizzeria Rustica
+          </h1>
         </Link>
         <Link href="/">
           <Image
@@ -31,7 +33,7 @@ export default function Header() {
             alt="Pizzeria Rustica Logo"
             width={100}
             height={100}
-            className="block"
+            className="block mx-auto"
           />
         </Link>
       </div>
