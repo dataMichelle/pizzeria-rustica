@@ -25,6 +25,7 @@ export default function CheckoutPage() {
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
+  // Ensure the clientId is defined
   if (!clientId) {
     console.error(
       "PayPal Client ID is not defined. Please check your environment variables."
@@ -65,7 +66,6 @@ export default function CheckoutPage() {
         </div>
 
         <div className="w-full md:w-1/2">
-          {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
               <PayPalScriptProvider
@@ -73,6 +73,7 @@ export default function CheckoutPage() {
                   "client-id": clientId,
                 }}
               >
+                {/* Ensure PayPalCheckout receives correct totalPrice and tipAmount */}
                 <PayPalCheckout totalPrice={total} tipAmount={tipAmount} />
               </PayPalScriptProvider>
             </div>
