@@ -26,7 +26,7 @@ export default function HomePage() {
         </div>
 
         {/* Image Section */}
-        <div className="relative w-full h-[40vh] md:h-[25vh] lg:h-[35vh] xl:h-[45vh] xl:w-[30vw]">
+        <div className="relative w-full h-[40vh] md:h-[25vh] lg:h-[25vh] xl:h-[35vh] 2xl:h-[45vh] md:w-[50vw] lg:w-[40vw] xl:w-[30vw]">
           <Image
             src="/hero_serving_pizza.png"
             alt="Pizzeria Rustica Hero Image"
