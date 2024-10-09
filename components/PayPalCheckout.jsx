@@ -97,7 +97,7 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
     <div>
       {isPending && <div>Loading PayPal options...</div>}
 
-      {scriptLoaded && (
+      {scriptLoaded ? (
         <>
           {/* PayPal Standard Button */}
           <div style={{ padding: "20px" }}>
@@ -138,6 +138,8 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
             />
           </div>
         </>
+      ) : (
+        console.log("PayPal script not loaded yet")
       )}
     </div>
   );

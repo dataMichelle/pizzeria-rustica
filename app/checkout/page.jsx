@@ -82,7 +82,7 @@ export default function CheckoutPage() {
 
         {/* PayPal Button Rendering */}
         <div className="w-full md:w-1/2">
-          {cartItems.length > 0 && (
+          {cartItems.length > 0 ? (
             <div className="my-4">
               <PayPalScriptProvider
                 options={{
@@ -92,6 +92,8 @@ export default function CheckoutPage() {
                 <PayPalCheckout totalPrice={total} tipAmount={tipAmount} />
               </PayPalScriptProvider>
             </div>
+          ) : (
+            console.log("Cart is empty, not rendering PayPal buttons")
           )}
         </div>
       </div>
