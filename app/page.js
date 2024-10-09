@@ -32,7 +32,7 @@ export default function HomePage() {
             alt="Pizzeria Rustica Hero Image"
             fill
             style={{ objectFit: "cover" }}
-            className="rounded-lg md:object-contain"
+            className="rounded-lg md:object-cover lg:object-contain"
           />
         </div>
       </section>
