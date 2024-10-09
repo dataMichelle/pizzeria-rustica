@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import PayPalCheckout from "@/components/PayPalCheckout";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 export default function CheckoutPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -57,11 +58,14 @@ export default function CheckoutPage() {
           {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
-              options=
-              {{
-                "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-              }}
-              <PayPalCheckout totalPrice={total} />
+              <PayPalScriptProvider
+                options={{
+                  "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                  currency: "USD",
+                }}
+              >
+                <PayPalCheckout totalPrice={total} />
+              </PayPalScriptProvider>
             </div>
           )}
         </div>
