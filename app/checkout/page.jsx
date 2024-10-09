@@ -9,25 +9,29 @@ export default function CheckoutPage() {
   const [tipAmount, setTipAmount] = useState(0);
   const [taxAmount, setTaxAmount] = useState(0);
 
-  // Load cart, tip, tax, and total from localStorage
+  // Load cart, tip, and tax data from localStorage only once
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
     const storedTax = parseFloat(localStorage.getItem("tax")) || 0;
-    const storedTotal = parseFloat(localStorage.getItem("finalTotal")) || 0;
+    const storedFinalTotal =
+      parseFloat(localStorage.getItem("finalTotal")) || 0;
 
-    // Only set state once during initial load
+    // Set cart items and amounts once on page load
     setCartItems(storedCart);
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
 
-    // Adjust total to include tip and tax
-    const finalTotal = storedTotal + storedTip + storedTax;
-    setTotal(finalTotal);
-  }, []); // Empty dependency array ensures this effect only runs once on mount
+    // Calculate and set the total only once, avoid recalculating multiple times
+    const calculatedTotal = storedFinalTotal + storedTip + storedTax;
+    setTotal(calculatedTotal);
+  }, []); // Run only on component mount
 
+  // Log for debugging purposes
+  console.log("Total Price:", total);
+
+  // Check for PayPal Client ID from environment
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-
   if (!clientId) {
     console.error(
       "PayPal Client ID is not defined. Please check your environment variables."
@@ -42,12 +46,13 @@ export default function CheckoutPage() {
       <div className="flex flex-col md:flex-row md:space-x-10">
         <div className="w-full md:w-1/2 bg-gray-100 p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold mb-4">Your Order</h2>
+
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
           ) : (
             <ul>
-              {cartItems.map((item) => (
-                <li key={item.id} className="mb-4">
+              {cartItems.map((item, index) => (
+                <li key={index} className="mb-4">
                   <h3 className="text-lg font-semibold">{item.name}</h3>
                   <p>
                     {item.quantity} x ${item.price.toFixed(2)} = $
@@ -57,7 +62,8 @@ export default function CheckoutPage() {
               ))}
             </ul>
           )}
-          {/* Order Total with Tip and Tax */}
+
+          {/* Display Tip, Tax, and Total */}
           <p className="font-semibold text-lg mt-2">
             Tip: ${tipAmount.toFixed(2)}
           </p>
@@ -67,8 +73,8 @@ export default function CheckoutPage() {
           <p className="font-bold text-xl mt-4">Total: ${total.toFixed(2)}</p>
         </div>
 
+        {/* PayPal Button Rendering */}
         <div className="w-full md:w-1/2">
-          {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
               <PayPalScriptProvider
