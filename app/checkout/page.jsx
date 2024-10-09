@@ -9,20 +9,29 @@ export default function CheckoutPage() {
   const [tipAmount, setTipAmount] = useState(0);
   const [taxAmount, setTaxAmount] = useState(0);
 
+  // Load cart, tip, tax, and total from localStorage
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCart);
-
-    const storedTotal = parseFloat(localStorage.getItem("finalTotal")) || 0;
     const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
     const storedTax = parseFloat(localStorage.getItem("tax")) || 0;
+    const storedTotal = parseFloat(localStorage.getItem("finalTotal")) || 0;
 
-    setTotal(storedTotal);
+    setCartItems(storedCart);
     setTipAmount(storedTip);
     setTaxAmount(storedTax);
+
+    // Calculate the total including tip and tax
+    setTotal(storedTotal + storedTip + storedTax);
   }, []);
 
-  const totalPrice = total + tipAmount + taxAmount; // Calculate the total price
+  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
+  if (!clientId) {
+    console.error(
+      "PayPal Client ID is not defined. Please check your environment variables."
+    );
+    return <div>Error: PayPal Client ID is not defined.</div>;
+  }
 
   return (
     <div className="container mx-auto text-center py-12">
@@ -46,27 +55,26 @@ export default function CheckoutPage() {
               ))}
             </ul>
           )}
+          {/* Order Total with Tip and Tax */}
           <p className="font-semibold text-lg mt-2">
             Tip: ${tipAmount.toFixed(2)}
           </p>
           <p className="font-semibold text-lg mt-2">
             Tax: ${taxAmount.toFixed(2)}
           </p>
-          <p className="font-bold text-xl mt-4">
-            Total: ${totalPrice.toFixed(2)}
-          </p>
+          <p className="font-bold text-xl mt-4">Total: ${total.toFixed(2)}</p>
         </div>
 
         <div className="w-full md:w-1/2">
+          {/* Replace form with PayPal buttons */}
           {cartItems.length > 0 && (
             <div className="my-4">
               <PayPalScriptProvider
                 options={{
-                  "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                  "client-id": clientId,
                 }}
               >
-                {/* Pass the calculated totalPrice to the PayPalCheckout component */}
-                <PayPalCheckout totalPrice={totalPrice} />
+                <PayPalCheckout totalPrice={total} tipAmount={tipAmount} />
               </PayPalScriptProvider>
             </div>
           )}
