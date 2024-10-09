@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
-const PayPalCheckout = ({ totalPrice, tipAmount }) => {
+const PayPalCheckout = ({ totalPrice }) => {
   const [{ isPending, isRejected, options }, dispatch] =
     usePayPalScriptReducer();
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   // Ensure the PayPal script reloads correctly when needed
   useEffect(() => {
-    console.log("Resetting PayPal script options");
     dispatch({
       type: "resetOptions",
       value: {
@@ -20,12 +19,8 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("PayPal script loading state:", { isPending, isRejected });
     if (!isPending && !isRejected) {
-      console.log("PayPal script loaded successfully");
       setScriptLoaded(true);
-    } else if (isRejected) {
-      console.error("Failed to load PayPal script");
     }
   }, [isPending, isRejected]);
 
@@ -35,24 +30,18 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
 
   const createOrder = (data, actions) => {
     const parsedTotalPrice = parseFloat(totalPrice);
-    const parsedTipAmount = parseFloat(tipAmount) || 0; // Default to 0 if tipAmount is empty
 
-    if (isNaN(parsedTotalPrice) || isNaN(parsedTipAmount)) {
-      console.error("Invalid totalPrice or tipAmount:", {
-        totalPrice,
-        tipAmount,
-      });
+    if (isNaN(parsedTotalPrice)) {
+      console.error("Invalid totalPrice:", { totalPrice });
       return;
     }
 
-    const totalAmount = (parsedTotalPrice + parsedTipAmount).toFixed(2);
+    const totalAmount = parsedTotalPrice.toFixed(2);
 
     if (isNaN(totalAmount)) {
       console.error("Invalid total amount:", totalAmount);
       return;
     }
-
-    console.log("Creating order with total amount:", totalAmount);
 
     return actions.order
       .create({
@@ -65,7 +54,6 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
         ],
       })
       .then((orderID) => {
-        console.log("Order created successfully:", orderID);
         return orderID;
       })
       .catch((err) => {
@@ -74,11 +62,9 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
   };
 
   const onApprove = (data, actions) => {
-    console.log("Order approved, capturing order");
     return actions.order
       .capture()
       .then((details) => {
-        console.log("Order captured successfully:", details);
         alert("Transaction completed by " + details.payer.name.given_name);
       })
       .catch((err) => {
