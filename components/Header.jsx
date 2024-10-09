@@ -23,13 +23,15 @@ export default function Header() {
       {/* Logo and Title for Mobile */}
       <div className="flex flex-col items-center md:hidden">
         <h1 className="text-2xl font-quicksand mb-2">Pizzeria Rustica</h1>
-        <Image
-          src="/logo.png"
-          alt="Pizzeria Rustica Logo"
-          width={100}
-          height={100}
-          className="block"
-        />
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="Pizzeria Rustica Logo"
+            width={100}
+            height={100}
+            className="block"
+          />
+        </Link>
       </div>
 
       {/* Left Section - Pizzeria Rustica for Desktop */}
@@ -39,13 +41,15 @@ export default function Header() {
 
       {/* Center Section - Logo for Desktop */}
       <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-1/2 -translate-y-1/2">
-        <Image
-          src="/logo.png"
-          alt="Pizzeria Rustica Logo"
-          width={150}
-          height={150}
-          className="block"
-        />
+        <Link href="/">
+          <Image
+            src="/logo.png"
+            alt="Pizzeria Rustica Logo"
+            width={150}
+            height={150}
+            className="block"
+          />
+        </Link>
       </div>
 
       {/* Mobile Menu Button (always on the right) */}
