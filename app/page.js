@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <main className="bg-white">
       {/* Hero Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 md:h-[75vh] lg:h-[60vh] items-center gap-12 px-6 md:px-16 lg:px-32 py-8">
+      <section className="grid grid-cols-1 md:grid-cols-2 items-center gap-12 px-6 md:px-16 lg:px-32 py-8">
         {/* Text Section */}
         <div className="text-center md:text-left space-y-4 md:space-y-6">
           <h1 className="text-4xl md:text-5xl font-bold">
@@ -26,13 +26,13 @@ export default function HomePage() {
         </div>
 
         {/* Image Section */}
-        <div className="relative w-full h-[40vh] md:h-[50vh] lg:h-full xl:h-[50vh] 2xl:h-[40vh]">
+        <div className="relative w-full h-[40vh] md:h-[40vh] lg:h-[50vh] xl:h-[60vh]">
           <Image
             src="/hero_serving_pizza.png"
             alt="Pizzeria Rustica Hero Image"
             fill
             style={{ objectFit: "cover" }}
-            className="rounded-lg md:object-cover lg:object-contain"
+            className="rounded-lg"
           />
         </div>
       </section>
