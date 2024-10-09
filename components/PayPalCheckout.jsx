@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
@@ -65,6 +67,25 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
       });
   };
 
+  const onApprove = (data, actions) => {
+    return actions.order
+      .capture()
+      .then((details) => {
+        alert("Transaction completed by " + details.payer.name.given_name);
+      })
+      .catch((err) => {
+        console.error("Error capturing order:", err); // Log any errors
+      });
+  };
+
+  const onError = (err) => {
+    console.error("PayPal Checkout onError", err);
+  };
+
+  const onCancel = () => {
+    console.log("PayPal Checkout onCancel");
+  };
+
   return (
     <div>
       {isPending && <div>Loading PayPal options...</div>}
@@ -78,19 +99,9 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
               style={{ layout: "vertical" }}
               fundingSource="paypal"
               createOrder={createOrder}
-              onApprove={(data, actions) => {
-                return actions.order.capture().then((details) => {
-                  alert(
-                    "Transaction completed by " + details.payer.name.given_name
-                  );
-                });
-              }}
-              onError={(err) => {
-                console.error("PayPal Checkout onError", err);
-              }}
-              onCancel={() => {
-                console.log("PayPal Checkout onCancel");
-              }}
+              onApprove={onApprove}
+              onError={onError}
+              onCancel={onCancel}
             />
           </div>
 
@@ -101,19 +112,9 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
               style={{ layout: "vertical" }}
               fundingSource="paylater"
               createOrder={createOrder}
-              onApprove={(data, actions) => {
-                return actions.order.capture().then((details) => {
-                  alert(
-                    "Transaction completed by " + details.payer.name.given_name
-                  );
-                });
-              }}
-              onError={(err) => {
-                console.error("PayPal Pay Later onError", err);
-              }}
-              onCancel={() => {
-                console.log("PayPal Pay Later onCancel");
-              }}
+              onApprove={onApprove}
+              onError={onError}
+              onCancel={onCancel}
             />
           </div>
 
@@ -124,19 +125,9 @@ const PayPalCheckout = ({ totalPrice, tipAmount }) => {
               style={{ layout: "vertical" }}
               fundingSource="card"
               createOrder={createOrder}
-              onApprove={(data, actions) => {
-                return actions.order.capture().then((details) => {
-                  alert(
-                    "Transaction completed by " + details.payer.name.given_name
-                  );
-                });
-              }}
-              onError={(err) => {
-                console.error("PayPal Credit Card onError", err);
-              }}
-              onCancel={() => {
-                console.log("PayPal Credit Card onCancel");
-              }}
+              onApprove={onApprove}
+              onError={onError}
+              onCancel={onCancel}
             />
           </div>
         </>

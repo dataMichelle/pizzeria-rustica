@@ -1,139 +1,90 @@
 "use client";
+import { useState, useEffect } from "react";
+import PayPalCheckout from "@/components/PayPalCheckout";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
-import { useEffect, useState } from "react";
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+export default function CheckoutPage() {
+  const [cartItems, setCartItems] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [tipAmount, setTipAmount] = useState(0);
+  const [taxAmount, setTaxAmount] = useState(0);
 
-const PayPalCheckout = ({ totalPrice, tipAmount }) => {
-  const [{ isPending, isRejected, options }, dispatch] =
-    usePayPalScriptReducer();
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  // Ensure the PayPal script reloads correctly when needed
+  // Load data once and set state only once during component mount
   useEffect(() => {
-    dispatch({
-      type: "resetOptions",
-      value: {
-        "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-        currency: "USD",
-        intent: "capture",
-      },
-    });
-  }, [dispatch]);
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const storedTip = parseFloat(localStorage.getItem("tip")) || 0;
+    const storedTax = parseFloat(localStorage.getItem("tax")) || 0;
+    const storedFinalTotal =
+      parseFloat(localStorage.getItem("finalTotal")) || 0;
 
-  useEffect(() => {
-    if (!isPending && !isRejected) {
-      setScriptLoaded(true);
-    }
-  }, [isPending, isRejected]);
+    // Calculate total only once and set state values
+    const calculatedTotal = storedFinalTotal + storedTip + storedTax;
 
-  if (isRejected) {
-    return <div>Error loading PayPal options. Please try again later.</div>;
+    // Update state only once to prevent re-render loops
+    setCartItems(storedCart);
+    setTipAmount(storedTip);
+    setTaxAmount(storedTax);
+    setTotal(calculatedTotal);
+  }, []); // Empty dependency array to ensure this runs only once on component mount
+
+  // Check for PayPal Client ID
+  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+  if (!clientId) {
+    console.error(
+      "PayPal Client ID is not defined. Please check your environment variables."
+    );
+    return <div>Error: PayPal Client ID is not defined.</div>;
   }
 
-  const createOrder = (data, actions) => {
-    const parsedTotalPrice = parseFloat(totalPrice);
-    const parsedTipAmount = parseFloat(tipAmount) || 0; // Default to 0 if tipAmount is empty
-
-    if (isNaN(parsedTotalPrice) || isNaN(parsedTipAmount)) {
-      console.error("Invalid totalPrice or tipAmount:", {
-        totalPrice,
-        tipAmount,
-      });
-      return;
-    }
-
-    const totalAmount = (parsedTotalPrice + parsedTipAmount).toFixed(2);
-
-    if (isNaN(totalAmount)) {
-      console.error("Invalid total amount:", totalAmount);
-      return;
-    }
-
-    return actions.order
-      .create({
-        purchase_units: [
-          {
-            amount: {
-              value: totalAmount,
-            },
-          },
-        ],
-      })
-      .then((orderID) => {
-        return orderID;
-      })
-      .catch((err) => {
-        console.error("Error creating order:", err); // Log any errors
-      });
-  };
-
-  const onApprove = (data, actions) => {
-    return actions.order
-      .capture()
-      .then((details) => {
-        alert("Transaction completed by " + details.payer.name.given_name);
-      })
-      .catch((err) => {
-        console.error("Error capturing order:", err); // Log any errors
-      });
-  };
-
-  const onError = (err) => {
-    console.error("PayPal Checkout onError", err);
-  };
-
-  const onCancel = () => {
-    console.log("PayPal Checkout onCancel");
-  };
-
   return (
-    <div>
-      {isPending && <div>Loading PayPal options...</div>}
+    <div className="container mx-auto text-center py-12">
+      <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
 
-      {scriptLoaded && (
-        <>
-          {/* PayPal Standard Button */}
-          <div style={{ padding: "20px" }}>
-            <PayPalButtons
-              key="paypal"
-              style={{ layout: "vertical" }}
-              fundingSource="paypal"
-              createOrder={createOrder}
-              onApprove={onApprove}
-              onError={onError}
-              onCancel={onCancel}
-            />
-          </div>
+      <div className="flex flex-col md:flex-row md:space-x-10">
+        <div className="w-full md:w-1/2 bg-gray-100 p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Your Order</h2>
 
-          {/* Pay Later Button */}
-          <div style={{ padding: "20px" }}>
-            <PayPalButtons
-              key="paylater"
-              style={{ layout: "vertical" }}
-              fundingSource="paylater"
-              createOrder={createOrder}
-              onApprove={onApprove}
-              onError={onError}
-              onCancel={onCancel}
-            />
-          </div>
+          {cartItems.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            <ul>
+              {cartItems.map((item, index) => (
+                <li key={index} className="mb-4">
+                  <h3 className="text-lg font-semibold">{item.name}</h3>
+                  <p>
+                    {item.quantity} x ${item.price.toFixed(2)} = $
+                    {(item.quantity * item.price).toFixed(2)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
 
-          {/* Credit Card Button */}
-          <div style={{ padding: "20px" }}>
-            <PayPalButtons
-              key="card"
-              style={{ layout: "vertical" }}
-              fundingSource="card"
-              createOrder={createOrder}
-              onApprove={onApprove}
-              onError={onError}
-              onCancel={onCancel}
-            />
-          </div>
-        </>
-      )}
+          {/* Display Tip, Tax, and Total */}
+          <p className="font-semibold text-lg mt-2">
+            Tip: ${tipAmount.toFixed(2)}
+          </p>
+          <p className="font-semibold text-lg mt-2">
+            Tax: ${taxAmount.toFixed(2)}
+          </p>
+          <p className="font-bold text-xl mt-4">Total: ${total.toFixed(2)}</p>
+        </div>
+
+        {/* PayPal Button Rendering */}
+        <div className="w-full md:w-1/2">
+          {cartItems.length > 0 && (
+            <div className="my-4">
+              <PayPalScriptProvider
+                options={{
+                  "client-id": clientId,
+                }}
+              >
+                <PayPalCheckout totalPrice={total} tipAmount={tipAmount} />
+              </PayPalScriptProvider>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
-};
-
-export default PayPalCheckout;
+}
