@@ -26,12 +26,12 @@ export default function HomePage() {
         </div>
 
         {/* Image Section */}
-        <div className="relative w-full h-[40vh] md:h-[25vh] lg:h-[25vh] xl:h-[35vh] 2xl:h-[45vh] md:w-[50vw] lg:w-[40vw] xl:w-[30vw]">
+        <div className="relative w-full h-[45vh] md:h-[40vh] lg:h-[30vh] xl:h-[40vh] 2xl:h-[50vh] md:w-[50vw] lg:w-[40vw] xl:w-[30vw]">
           <Image
             src="/hero_serving_pizza.png"
             alt="Pizzeria Rustica Hero Image"
             fill
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover", objectPosition: "top" }}
             className="rounded-lg"
           />
         </div>
