@@ -1,5 +1,5 @@
 "use client";
-import { CartProvider } from "@/components/CartContext";
+import { CartProvider } from "@/context/CartContext";
 import Menu from "@/components/Menu";
 
 export default function MenuWrapper() {

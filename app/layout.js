@@ -2,27 +2,27 @@ import { Oswald, Inter, Merienda, Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { CartProvider } from "@/components/CartContext";
+import { CartProvider } from "@/context/CartContext";
 
-// Importing Oswald and Inter fonts with custom weights and subsets
+// Fonts with custom weights and subsets
 const oswald = Oswald({
   subsets: ["latin"],
-  weight: ["400", "700"], // Specify the weights you want to use
+  weight: ["400", "700"],
 });
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "700"], // Specify the weights you want to use
+  weight: ["400", "500", "700"],
 });
 
 const merienda = Merienda({
   subsets: ["latin"],
-  weight: ["400", "700"], // Specify the weights you want to use
+  weight: ["400", "700"],
 });
 
 const quicksand = Quicksand({
   subsets: ["latin"],
-  weight: ["400", "500", "700"], // Specify the weights you want to use
+  weight: ["400", "500", "700"],
 });
 
 export const metadata = {
@@ -50,13 +50,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <CartProvider>
-        <body className={`${oswald.className} ${inter.className}`}>
+      <body className={`${oswald.className} ${inter.className}`}>
+        <CartProvider>
           <Header />
           {children}
           <Footer />
-        </body>
-      </CartProvider>
+        </CartProvider>
+      </body>
     </html>
   );
 }

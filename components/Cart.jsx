@@ -1,54 +1,74 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation"; // Use this for programmatic routing
+
+import { useCart } from "@/context/CartContext";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useCart } from "@/components/CartContext";
 
 export default function Cart() {
-  const { cartItems, clearCart, removeFromCart, updateCart } = useCart();
-  const [tip, setTip] = useState(0);
-  const router = useRouter(); // Initialize the router
+  const {
+    cartItems,
+    clearCart,
+    removeFromCart,
+    updateCart,
+    tipAmount,
+    updateTip,
+    taxAmount,
+    updateTax,
+    total,
+  } = useCart();
+  const router = useRouter();
 
   // Update quantity of items in the cart
   const handleQuantityChange = (id, newQuantity) => {
-    const updatedCart = cartItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, quantity: newQuantity };
-      }
-      return item;
-    });
+    const updatedCart = cartItems.map((item) =>
+      item.id === id
+        ? { ...item, quantity: Math.max(1, parseInt(newQuantity) || 1) }
+        : item
+    );
     updateCart(updatedCart);
   };
 
   // Handle removing an item from the cart
-  const handleRemoveItem = (id) => {
-    removeFromCart(id);
-  };
+  const handleRemoveItem = (id) => removeFromCart(id);
 
-  // Calculate the total price before and after tax
+  // Calculate subtotal for display and update tax
   const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
-  const tax = subtotal * 0.0825; // Tax rate of 8.25%
-  const total = subtotal + tax + parseFloat(tip || 0); // Total after tax and tip
+  const taxRate = 0.0825; // 8.25% tax rate
+  const calculatedTax = subtotal * taxRate;
 
-  // Save the final total to localStorage when proceeding to checkout
+  // Update tip and tax in context
+  const handleTipChange = (e) => {
+    const value = e.target.value;
+    const newTip = value === "" ? 0 : parseFloat(value) || 0;
+    updateTip(newTip);
+  };
+
+  // Sync tax with context when subtotal changes
+  useEffect(() => {
+    updateTax(calculatedTax);
+  }, [subtotal, updateTax]);
+
+  // Proceed to checkout
   const handleProceedToCheckout = () => {
-    const finalAmount = total.toFixed(2);
-    const calculatedTax = tax.toFixed(2);
-    const calculatedTip = tip.toFixed(2);
-
-    localStorage.setItem("finalTotal", finalAmount); // Save final total including tip and tax to localStorage
-    localStorage.setItem("tip", calculatedTip); // Save the tip to localStorage
-    localStorage.setItem("tax", calculatedTax); // Save the tax to localStorage
-
-    // Programmatically navigate to the checkout page
     router.push("/checkout");
   };
 
   if (cartItems.length === 0) {
-    return <p className="text-center">Your cart is empty.</p>;
+    return (
+      <div className="w-full max-w-xl mx-auto px-4 md:px-6 lg:px-8 my-2 text-center">
+        <p>Your cart is empty.</p>
+        <Link
+          href="/orders"
+          className="text-blue-500 hover:underline block mt-4"
+        >
+          Return to Menu
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -61,7 +81,7 @@ export default function Cart() {
           >
             <div className="flex-1">
               <h2 className="text-xl">{item.name}</h2>
-              <p className="text-gray-600">${item.price} each</p>
+              <p className="text-gray-600">${item.price.toFixed(2)} each</p>
               <div className="flex items-center mt-2">
                 <label htmlFor={`quantity-${item.id}`} className="mr-2">
                   Quantity:
@@ -71,7 +91,7 @@ export default function Cart() {
                   id={`quantity-${item.id}`}
                   value={item.quantity}
                   onChange={(e) =>
-                    handleQuantityChange(item.id, parseInt(e.target.value))
+                    handleQuantityChange(item.id, e.target.value)
                   }
                   min="1"
                   className="border px-2 py-1 w-16"
@@ -80,7 +100,7 @@ export default function Cart() {
             </div>
             <div className="flex flex-col items-start md:items-end mt-4 md:mt-0">
               <p className="text-lg font-semibold">
-                Total: ${(item.price * item.quantity).toFixed(2)}
+                ${(item.price * item.quantity).toFixed(2)}
               </p>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded mt-2"
@@ -98,8 +118,7 @@ export default function Cart() {
         <p className="text-lg font-semibold">
           Subtotal: ${subtotal.toFixed(2)}
         </p>
-        <p className="text-lg font-semibold">Tax: ${tax.toFixed(2)}</p>
-
+        <p className="text-lg font-semibold">Tax: ${taxAmount.toFixed(2)}</p>
         <div className="my-4 flex flex-col items-end">
           <label htmlFor="tip" className="block font-semibold mb-2">
             Tip Amount:
@@ -107,31 +126,28 @@ export default function Cart() {
           <input
             type="number"
             id="tip"
-            value={tip}
-            onChange={(e) => setTip(parseFloat(e.target.value))}
+            value={tipAmount === 0 ? "" : tipAmount} // Show empty if 0 to avoid leading zero
+            onChange={handleTipChange}
             className="border px-2 py-1 w-24"
-            placeholder="Enter tip amount"
+            placeholder="Enter tip"
+            step="0.01"
+            min="0"
           />
         </div>
-
         <p className="text-xl font-bold">Total: ${total.toFixed(2)}</p>
       </div>
 
+      {/* Action Buttons */}
       <div className="my-12 text-center py-5">
-        {/* Return to Menu Link */}
         <Link href="/menu" className="text-blue-500 hover:underline block mb-4">
           Return to Menu
         </Link>
-
-        {/* Clear Cart Button */}
         <button
           className="bg-yellow-500 text-white px-4 py-2 rounded mr-4 mb-4"
           onClick={clearCart}
         >
           Clear Cart
         </button>
-
-        {/* Proceed to Checkout Button */}
         <button
           className="bg-green-500 text-white px-4 py-2 rounded mr-4 mb-4"
           onClick={handleProceedToCheckout}

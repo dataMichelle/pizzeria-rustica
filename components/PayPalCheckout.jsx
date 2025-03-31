@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect } from "react";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
-const PayPalCheckout = ({ totalPrice }) => {
-  const [{ isPending, isRejected, options }, dispatch] =
-    usePayPalScriptReducer();
-  const [scriptLoaded, setScriptLoaded] = useState(false);
+export default function PayPalCheckout({ totalPrice }) {
+  const [{ isPending, isRejected }, dispatch] = usePayPalScriptReducer();
 
-  // Ensure the PayPal script reloads correctly when needed
+  // Reset PayPal script options on mount
   useEffect(() => {
     dispatch({
       type: "resetOptions",
@@ -18,118 +18,67 @@ const PayPalCheckout = ({ totalPrice }) => {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!isPending && !isRejected) {
-      setScriptLoaded(true);
-    }
-  }, [isPending, isRejected]);
-
-  if (isRejected) {
-    return <div>Error loading PayPal options. Please try again later.</div>;
-  }
-
+  // Order creation with validation
   const createOrder = (data, actions) => {
-    const parsedTotalPrice = parseFloat(totalPrice);
-
-    if (isNaN(parsedTotalPrice)) {
-      console.error("Invalid totalPrice:", { totalPrice });
-      return;
+    const total = parseFloat(totalPrice);
+    if (isNaN(total) || total <= 0) {
+      console.error("Invalid totalPrice:", totalPrice);
+      return Promise.reject(new Error("Invalid total amount"));
     }
-
-    const totalAmount = parsedTotalPrice.toFixed(2);
-
-    if (isNaN(totalAmount)) {
-      console.error("Invalid total amount:", totalAmount);
-      return;
-    }
-
     return actions.order
       .create({
         purchase_units: [
           {
             amount: {
-              value: totalAmount,
+              value: total.toFixed(2),
             },
           },
         ],
       })
-      .then((orderID) => {
-        return orderID;
-      })
       .catch((err) => {
-        console.error("Error creating order:", err); // Log any errors
+        console.error("Order creation failed:", err);
+        throw err; // Re-throw for onError to catch
       });
   };
 
-  const onApprove = (data, actions) => {
-    return actions.order
-      .capture()
-      .then((details) => {
-        alert("Transaction completed by " + details.payer.name.given_name);
-      })
-      .catch((err) => {
-        console.error("Error capturing order:", err); // Log any errors
-      });
+  // Payment approval
+  const onApprove = async (data, actions) => {
+    try {
+      const details = await actions.order.capture();
+      alert(`Transaction completed by ${details.payer.name.given_name}`);
+    } catch (err) {
+      console.error("Payment capture failed:", err);
+      throw err; // Re-throw for onError
+    }
   };
 
+  // Error and cancellation handlers
   const onError = (err) => {
-    console.error("PayPal Checkout onError", err);
+    console.error("PayPal error:", err);
+    // Optionally set an error state to display to user
   };
 
   const onCancel = () => {
-    console.log("PayPal Checkout onCancel");
+    console.log("Payment cancelled by user");
   };
 
   return (
-    <div>
-      {isPending && <div>Loading PayPal options...</div>}
-
-      {scriptLoaded ? (
-        <>
-          {/* PayPal Standard Button */}
-          <div style={{ padding: "20px" }}>
-            <PayPalButtons
-              key="paypal"
-              style={{ layout: "vertical" }}
-              fundingSource="paypal"
-              createOrder={createOrder}
-              onApprove={onApprove}
-              onError={onError}
-              onCancel={onCancel}
-            />
-          </div>
-
-          {/* Pay Later Button */}
-          <div style={{ padding: "20px" }}>
-            <PayPalButtons
-              key="paylater"
-              style={{ layout: "vertical" }}
-              fundingSource="paylater"
-              createOrder={createOrder}
-              onApprove={onApprove}
-              onError={onError}
-              onCancel={onCancel}
-            />
-          </div>
-
-          {/* Credit Card Button */}
-          <div style={{ padding: "20px" }}>
-            <PayPalButtons
-              key="card"
-              style={{ layout: "vertical" }}
-              fundingSource="card"
-              createOrder={createOrder}
-              onApprove={onApprove}
-              onError={onError}
-              onCancel={onCancel}
-            />
-          </div>
-        </>
-      ) : (
-        <div>Loading PayPal script...</div>
+    <div className="flex flex-col items-center gap-4 p-4 max-w-[300px] mx-auto">
+      {isPending && <p className="text-gray-600">Loading PayPal options...</p>}
+      {isRejected && (
+        <p className="text-red-500">
+          Failed to load PayPal. Please try again later.
+        </p>
+      )}
+      {!isPending && !isRejected && (
+        <PayPalButtons
+          style={{ layout: "vertical" }}
+          createOrder={createOrder}
+          onApprove={onApprove}
+          onError={onError}
+          onCancel={onCancel}
+        />
       )}
     </div>
   );
-};
-
-export default PayPalCheckout;
+}

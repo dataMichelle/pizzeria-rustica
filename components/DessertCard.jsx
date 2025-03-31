@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { useCart } from "../components/CartContext";
+import { useCart } from "../context/CartContext";
 
 export default function DessertCard({ dessert }) {
   const [quantity, setQuantity] = useState(1);
