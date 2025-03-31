@@ -14,12 +14,12 @@ export default function HomePage() {
               Pizzeria Rustica
             </span>
           </h1>
-          <p className="text-lg md:text-xl">
+          <p className="text-lg md:text-xl ml-2">
             Authentic Italian Pizza. A Slice of Tradition.
           </p>
           <Link
             href="/orders"
-            className="bg-primary py-3 px-6 rounded-full text-black uppercase font-semibold hover:bg-opacity-90 transition duration-300 inline-block"
+            className="bg-primary py-3 pl-2 rounded-full text-black uppercase font-semibold hover:bg-opacity-90 transition duration-300 inline-block"
           >
             Explore Our Menu
           </Link>
