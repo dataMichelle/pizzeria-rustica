@@ -73,9 +73,9 @@ export default function CheckoutPage() {
         </div>
 
         {/* PayPal Button Rendering */}
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/3 flex justify-center">
           {isCartLoaded && cartItems.length > 0 && (
-            <div className="my-4">
+            <div className="my-4 max-w-[300px] w-full">
               <PayPalScriptProvider
                 options={{
                   "client-id": clientId,
